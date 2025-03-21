@@ -1,18 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PantallaLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "admin@segurix.com" && password === "123456") {
-      alert("Inicio de sesión exitoso");
-      navigate("/"); // Redirige a la pantalla principal
-    } else {
-      alert("Credenciales incorrectas");
+
+    try {
+      // Enviar las credenciales al backend
+      const response = await axios.post("http://localhost:8082/api/users/login", {
+        email,
+        password,
+      }, {
+        headers: {
+          "Content-Type": "application/json", // Asegúrate de que el encabezado sea JSON
+        },
+      });
+
+      // Si el inicio de sesión es exitoso
+      alert(response.data.message); // Mensaje del servidor
+      navigate("/home"); // Redirige a PantallaPrincipal
+    } catch (error: any) {
+      // Manejo de errores
+      if (error.response) {
+        alert(error.response.data.message); // Mensaje de error del servidor
+      } else {
+        alert("Error al conectar con el servidor");
+      }
     }
   };
 
@@ -38,20 +56,21 @@ const PantallaLogin: React.FC = () => {
           style={styles.input}
         />
 
-        <button type="submit" style={styles.button}>Ingresar</button>
+        <button type="submit" style={styles.button}>
+          Ingresar
+        </button>
       </form>
     </div>
   );
 };
 
-// **Estilos en el mismo archivo con tipos correctos**
 const styles: Record<string, React.CSSProperties> = {
   container: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", fontFamily: "Arial, sans-serif", textAlign: "center" as "center" },
   title: { fontSize: "24px", fontWeight: "bold", marginBottom: "20px" },
   form: { display: "flex", flexDirection: "column", width: "300px", padding: "20px", borderRadius: "5px", backgroundColor: "#fff", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)" },
   label: { fontSize: "14px", fontWeight: "bold", marginBottom: "5px", textAlign: "left" as "left" },
   input: { padding: "10px", marginBottom: "15px", border: "1px solid #ccc", borderRadius: "4px", fontSize: "16px", width: "100%" },
-  button: { padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px", fontSize: "16px", cursor: "pointer" }
+  button: { padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px", fontSize: "16px", cursor: "pointer" },
 };
 
 export default PantallaLogin;
