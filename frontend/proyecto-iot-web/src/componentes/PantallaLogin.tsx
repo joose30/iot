@@ -60,6 +60,12 @@ const PantallaLogin: React.FC = () => {
           Ingresar
         </button>
       </form>
+      <p>
+        ¿No tienes una cuenta?{" "}
+        <a href="/register" style={{ color: "#007bff", textDecoration: "none" }}>
+          Regístrate aquí
+        </a>
+      </p>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import PantallaRfidControl from "./componentes/PantallaRfidControl";
 import Header from "./componentes/Header"; // Importa el componente Header
 import Footer from "./componentes/Foother"; // Importa el componente Footer
 import PantallaLogin from "./componentes/PantallaLogin"; // Importa PantallaLogin
+import PantallaRegistro from "./componentes/PantallaRegistro"; // Importa PantallaRegistro
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<PantallaLogin />} /> {/* Cambia la ruta raíz al login */}
           <Route path="/home" element={<PantallaPrincipal />} /> {/* Mueve PantallaPrincipal a /home */}
+          <Route path="/register" element={<PantallaRegistro />} /> {/* Nueva ruta para registro */}
           <Route path="/empresa" element={<Empresa />} />
           <Route path="/productos" element={<PantallaCatalogoProductos />} />
           <Route path="/dispositivo" element={<PantallaPuerta />} />

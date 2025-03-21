@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true }, // Nuevo campo
+  lastName: { type: String, required: true }, // Nuevo campo
+  surname: { type: String, required: true }, // Nuevo campo
+  phone: { type: String, required: true }, // Nuevo campo
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
