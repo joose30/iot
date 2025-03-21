@@ -37,19 +37,6 @@ const PantallaAgregarProducto: React.FC = () => {
   return (
     <div style={styles.screen}>
       <div style={styles.cardContainer}>
-        {/* Barra Superior */}
-        <div style={styles.topBar}>
-          <h1 style={styles.logo}>Segurix</h1>
-          <nav style={styles.nav}>
-            <Link to="/empresa" style={styles.navText}>Empresa</Link>
-            <Link to="/productos" style={styles.navText}>Productos</Link>
-            <Link to="/huella" style={styles.navText}>Huella</Link>
-            <Link to="/dispositivo" style={styles.navText}>Dispositivo IoT</Link>
-            <Link to="/rfid" style={styles.navText}>RFID</Link>
-            <Link to="/perfil" style={styles.navText}>Perfil</Link>
-            <Link to="/admin-productos" style={styles.navText}>Admin (agg prod)</Link>
-          </nav>
-        </div>
 
         {/* Contenido principal */}
         <div style={styles.contentContainer}>
@@ -94,20 +81,6 @@ const PantallaAgregarProducto: React.FC = () => {
           <button style={styles.button} onClick={handleAddProduct}>
             Agregar Producto
           </button>
-        </div>
-
-        {/* Footer */}
-        <div style={styles.footer}>
-          <div style={styles.footerLeft}>
-            <p style={styles.footerText}>Términos y condiciones</p>
-            <p style={styles.footerText}>Privacidad</p>
-          </div>
-          <div style={styles.footerRight}>
-            <p style={styles.footerTitle}>Contáctanos</p>
-            <p style={styles.footerText}>Col. Horacio Camargo</p>
-            <p style={styles.footerText}>segurix@mail.com</p>
-            <p style={styles.footerText}>+52 774 545 8510</p>
-          </div>
         </div>
       </div>
     </div>
