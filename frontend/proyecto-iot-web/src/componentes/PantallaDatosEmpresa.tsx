@@ -172,6 +172,44 @@ const PantallaDatosEmpresa: React.FC = () => {
           </div>
         )}
 
+        {/* Sección Valores */}
+        <div style={styles.section}>
+          <h3 style={styles.sectionTitle}>Valores</h3>
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Ingrese los valores de la empresa"
+            value={formData.valor}
+            onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+          />
+        </div>
+
+        {valoresList.length > 0 && (
+          <div style={styles.listContainer}>
+            <h3 style={styles.listTitle}>Valores:</h3>
+            {valoresList.map((item) => <p key={item._id}>{item.contenido}</p>)}
+          </div>
+        )}
+
+        {/* Sección Políticas */}
+        <div style={styles.section}>
+          <h3 style={styles.sectionTitle}>Políticas</h3>
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Ingrese las políticas de la empresa"
+            value={formData.politica}
+            onChange={(e) => setFormData({ ...formData, politica: e.target.value })}
+          />
+        </div>
+
+        {politicasList.length > 0 && (
+          <div style={styles.listContainer}>
+            <h3 style={styles.listTitle}>Políticas:</h3>
+            {politicasList.map((item) => <p key={item._id}>{item.descripcion}</p>)}
+          </div>
+        )}
+
         <button style={styles.button} onClick={handleSubmit}>Guardar Cambios</button>
       </div>
     </div>
