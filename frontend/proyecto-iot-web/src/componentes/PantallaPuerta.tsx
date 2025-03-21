@@ -8,8 +8,8 @@ const PantallaPuerta: React.FC = () => {
   const handleTogglePuerta = async () => {
     try {
       const url = puertaAbierta
-        ? "http://192.168.8.6:8082/api/door/cerrar"  // MI IPCONFIG
-        : "http://192.168.8.6:8082/api/door/abrir";
+        ? "http://192.168.8.3:8082/api/door/cerrar" //(IPCONFIG)
+        : "http://192.168.8.3:8082/api/door/abrir"; //(IPCONFIG)
       const response = await axios.get(url);
       setPuertaAbierta(!puertaAbierta);
       alert(response.data);
@@ -22,25 +22,6 @@ const PantallaPuerta: React.FC = () => {
   return (
     <div style={styles.screen}>
       <div style={styles.cardContainer}>
-        {/* Barra Superior */}
-        <div style={styles.topBar}>
-          <h1 style={styles.logo}>SEGURIX</h1>
-          <div style={styles.menuContainer}>
-            {[
-              { name: "Empresa", path: "/empresa" },
-              { name: "Productos", path: "/productos" },
-              { name: "Huella", path: "/huella" },
-              { name: "Dispositivo IoT", path: "/dispositivo" },
-              { name: "RFID", path: "/rfid" },
-              { name: "Perfil", path: "/perfil" },
-              { name: "Admin (agg prod)", path: "/admin-productos" },
-            ].map((option) => (
-              <Link key={option.name} to={option.path} style={styles.menuOption}>
-                {option.name}
-              </Link>
-            ))}
-          </div>
-        </div>
 
         {/* Contenido principal */}
         <div style={styles.contentContainer}>
@@ -67,20 +48,6 @@ const PantallaPuerta: React.FC = () => {
               <span style={styles.buttonIcon}>📜</span>
               <span style={styles.configButtonText}>Registros</span>
             </Link>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div style={styles.footer}>
-          <div style={styles.footerLeft}>
-            <p style={styles.footerText}>Términos y condiciones</p>
-            <p style={styles.footerText}>Privacidad</p>
-          </div>
-          <div style={styles.footerRight}>
-            <p style={styles.footerTitle}>Contáctanos</p>
-            <p style={styles.footerText}>Col. Horacio Camargo</p>
-            <p style={styles.footerText}>segurix@mail.com</p>
-            <p style={styles.footerText}>+52 774 545 8510</p>
           </div>
         </div>
       </div>
