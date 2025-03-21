@@ -12,30 +12,11 @@ const Empresa: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      {/* Barra de navegación */}
-      <div style={styles.topBar}>
-        <h1 style={styles.logo}>SEGURIX</h1>
-        <div style={styles.menuContainer}>
-          {[
-            { name: "Empresa", path: "/empresa" },
-            { name: "Productos", path: "/productos" },
-            { name: "Huella", path: "/huella" },
-            { name: "Dispositivo IoT", path: "/dispositivo" },
-            { name: "RFID", path: "/rfid" },
-            { name: "Perfil", path: "/perfil" },
-            { name: "Admin (agg prod)", path: "/admin-productos" },
-          ].map((option) => (
-            <Link key={option.name} to={option.path} style={styles.menuOption}>
-              {option.name}
-            </Link>
-          ))}
-        </div>
-      </div>
 
       {/* Sección Hero */}
       <div style={styles.heroSection}>
         <img
-          src="/images/puertaIOT-empresa.png"
+          src="src/images/puertaIOT-pantallaPrincipal.jpg"
           alt="Puerta Inteligente"
           style={styles.heroImage}
         />
@@ -62,20 +43,6 @@ const Empresa: React.FC = () => {
             <button style={styles.menuItem} onClick={handlePoliticas}>Políticas</button>
           </div>
         )}
-      </div>
-
-      {/* Footer */}
-      <div style={styles.footer}>
-        <div style={styles.footerLeft}>
-          <p>Términos y condiciones</p>
-          <p>Privacidad</p>
-        </div>
-        <div style={styles.footerRight}>
-          <p><strong>Contáctanos</strong></p>
-          <p>Col. Horacio Camargo</p>
-          <p>segurix@mail.com</p>
-          <p>+52 774 545 8510</p>
-        </div>
       </div>
     </div>
   );
