@@ -12,37 +12,10 @@ const PantallaInicio: React.FC = () => {
           <h1 style={styles.logo}>SEGURIX</h1>
         </div>
 
-        {/* Menú de opciones en horizontal */}
-        <div style={styles.menuContainer}>
-          {[
-            { name: "Empresa", path: "/empresa" },
-            { name: "Productos", path: "/productos" },
-            { name: "Huella", path: "/huella" },
-            { name: "Dispositivo IoT", path: "/dispositivo" },
-            { name: "RFID", path: "/rfid" },
-            { name: "Perfil", path: "/perfil" },
-            { name: "Admin (agg prod)", path: "/admin-productos" },
-            { name: "Admin (datos empresa)", path: "/admin-empresa" },
-            { name: "Alta del dispositivo", path: "/alta-dispositivo" },
-          ].map((option) => (
-            <Link
-              key={option.name}
-              to={option.path}
-              style={{
-                ...styles.menuOption,
-                ...(activeOption === option.name ? styles.menuOptionActive : {}),
-              }}
-              onClick={() => setActiveOption(option.name)}
-            >
-              {option.name}
-            </Link>
-          ))}
-        </div>
-
         {/* Sección Hero */}
         <div style={styles.heroSection}>
           <img
-            src="../../frontend/src/images/puertaIOT-pantallaPrincipal.jpg"
+            src="../images/puertaIOT-pantallaPrincipal.jpg"
             alt="Puerta Inteligente"
             style={styles.heroImage}
           />
@@ -60,20 +33,6 @@ const PantallaInicio: React.FC = () => {
           </div>
           <div style={styles.faqItem}>
             <p>¿Cómo conectar mi dispositivo IoT?</p>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div style={styles.footer}>
-          <div style={styles.footerLeft}>
-            <p style={styles.footerText}>Términos y condiciones</p>
-            <p style={styles.footerText}>Privacidad</p>
-          </div>
-          <div style={styles.footerRight}>
-            <p style={styles.footerTitle}>CONTÁCTANOS</p>
-            <p style={styles.footerText}>Col. Horacio Camargo</p>
-            <p style={styles.footerText}>segurix@mail.com</p>
-            <p style={styles.footerText}>+52 774 545 8510</p>
           </div>
         </div>
       </div>
