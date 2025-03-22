@@ -17,13 +17,23 @@ const PantallaLogin: React.FC = () => {
         password,
       }, {
         headers: {
-          "Content-Type": "application/json", // Asegúrate de que el encabezado sea JSON
+          "Content-Type": "application/json",
         },
       });
 
       // Si el inicio de sesión es exitoso
       alert(response.data.message); // Mensaje del servidor
-      navigate("/home"); // Redirige a PantallaPrincipal
+
+      // Guardar el nombre y rol del usuario en localStorage
+      localStorage.setItem("userName", response.data.name);
+      localStorage.setItem("userRole", response.data.role);
+
+      // Redirigir según el rol
+      if (response.data.role === "admin") {
+        navigate("/admin-dashboard"); // Redirige al dashboard de admin
+      } else {
+        navigate("/home"); // Redirige a la página principal para usuarios
+      }
     } catch (error: any) {
       // Manejo de errores
       if (error.response) {

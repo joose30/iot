@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String, required: true }, // Nuevo campo
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, enum: ['admin', 'user'], default: 'user' }, // Campo para roles
 });
 
 // Middleware para cifrar la contraseña antes de guardar

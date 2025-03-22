@@ -1,39 +1,50 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PantallaPrincipal from "./componentes/PantallaPrincipal";
-import Empresa from "./componentes/Empresa";
-import PantallaCatalogoProductos from "./componentes/PantallaCatalogoProductos";
-import PantallaPuerta from "./componentes/PantallaPuerta";
-import PantallaAgregarProducto from "./componentes/PantallaAgregarProducto";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Header from "./componentes/Header";
+import Foother from "./componentes/Foother";
+import PantallaLogin from "./componentes/PantallaLogin";
+import PantallaRegistro from "./componentes/PantallaRegistro";
+import PantallaInicio from "./componentes/PantallaPrincipal";
+import AdminDashboard from "./componentes/AdminDashboard";
 import PantallaDatosEmpresa from "./componentes/PantallaDatosEmpresa";
-import PantallaPerfil from "./componentes/PantallaPerfil";
-import PantallaRfidControl from "./componentes/PantallaRfidControl";
-import Header from "./componentes/Header"; // Importa el componente Header
-import Footer from "./componentes/Foother"; // Importa el componente Footer
-import PantallaLogin from "./componentes/PantallaLogin"; // Importa PantallaLogin
-import PantallaRegistro from "./componentes/PantallaRegistro"; // Importa PantallaRegistro
+import PantallaAgregarProducto from "./componentes/PantallaAgregarProducto";
+import PantallaCatalogo from "./componentes/PantallaCatalogoProductos"; // Importa PantallaCatalogo
+import PantallaPuerta from "./componentes/PantallaPuerta"; // Importa PantallaPuerta
+import PantallaRfidControl from "./componentes/PantallaRfidControl"; // Importa PantallaRfidControl
 
 const App: React.FC = () => {
+  const location = useLocation();
+
   return (
-    <Router>
-      <Header /> {/* Añade el Header aquí */}
+    <>
+      {/* Mostrar el Header solo si no estamos en la pantalla de login */}
+      {location.pathname !== "/" && <Header />}
       <div>
         <Routes>
-          <Route path="/" element={<PantallaLogin />} /> {/* Cambia la ruta raíz al login */}
-          <Route path="/home" element={<PantallaPrincipal />} /> {/* Mueve PantallaPrincipal a /home */}
-          <Route path="/register" element={<PantallaRegistro />} /> {/* Nueva ruta para registro */}
-          <Route path="/empresa" element={<Empresa />} />
-          <Route path="/productos" element={<PantallaCatalogoProductos />} />
-          <Route path="/dispositivo" element={<PantallaPuerta />} />
-          <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
+          <Route path="/" element={<PantallaLogin />} />
+          <Route path="/register" element={<PantallaRegistro />} />
+          <Route path="/home" element={<PantallaInicio />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-empresa" element={<PantallaDatosEmpresa />} />
-          <Route path="/perfil" element={<PantallaPerfil userId="123" />} />
-          <Route path="/RFID" element={<PantallaRfidControl />} />
+          <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
+          <Route path="/empresa" element={<PantallaCatalogo />} /> {/* Ruta para Empresa */}
+          <Route path="/productos" element={<PantallaCatalogo />} /> {/* Ruta para Productos */}
+          <Route path="/huella" element={<PantallaPuerta />} /> {/* Ruta para Huella */}
+          <Route path="/dispositivo" element={<PantallaPuerta />} /> {/* Ruta para Dispositivo IoT */}
+          <Route path="/rfid" element={<PantallaRfidControl />} /> {/* Ruta para RFID */}
+          <Route path="/perfil" element={<PantallaInicio />} /> {/* Ruta para Perfil */}
         </Routes>
       </div>
-      <Footer /> {/* Añade el Footer aquí */}
-    </Router>
+      {/* Mostrar el Foother solo si no estamos en la pantalla de login */}
+      {location.pathname !== "/" && <Foother />}
+    </>
   );
 };
 
-export default App;
+const AppWrapper: React.FC = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWrapper;

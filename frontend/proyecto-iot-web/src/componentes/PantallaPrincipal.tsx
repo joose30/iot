@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const PantallaInicio: React.FC = () => {
   const [activeOption, setActiveOption] = useState<string>("Empresa");
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    // Obtener el nombre del usuario desde localStorage
+    const name = localStorage.getItem("userName");
+    if (name) {
+      setUserName(name);
+    }
+  }, []);
 
   return (
     <div style={styles.screen}>
@@ -43,8 +52,7 @@ const PantallaInicio: React.FC = () => {
   );
 };
 
-// 🎨 **Estilos optimizados sin cambios exagerados**
-const styles: { [key: string]: React.CSSProperties } = {
+const styles: Record<string, React.CSSProperties> = {
   screen: {
     flex: 1,
     backgroundColor: "#E3EAFD",
@@ -186,6 +194,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     cursor: "pointer",
     transition: "background 0.3s",
   },
+  container: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", fontFamily: "Arial, sans-serif", textAlign: "center" as "center" },
+  title: { fontSize: "32px", fontWeight: "bold", marginBottom: "20px" },
+  subtitle: { fontSize: "18px", color: "#555" },
 };
 
 export default PantallaInicio;
