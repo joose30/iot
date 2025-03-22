@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const PantallaDatosEmpresa: React.FC = () => {
-  const API_BASE = "http://192.168.8.6:8082/api";
+  const API_BASE = "http://192.168.1.68:8082/api"; //(IPCONFIG)
 
   // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
