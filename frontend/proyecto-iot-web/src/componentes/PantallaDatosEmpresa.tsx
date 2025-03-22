@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const PantallaDatosEmpresa: React.FC = () => {
-  const API_BASE = "http://192.168.1.68:8082/api"; //(IPCONFIG)
+  const API_BASE = "http://localhost:8082/api"; //(IPCONFIG)
 
   // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
-    empresa: { ubicacion: "", telefono: "" },
-    pregunta: { pregunta: "", respuesta: "" },
     mision: "",
     vision: "",
     valor: "",
@@ -15,8 +13,6 @@ const PantallaDatosEmpresa: React.FC = () => {
   });
 
   // Estados para almacenar los datos listados desde la base de datos
-  const [empresaData, setEmpresaData] = useState<any>(null);
-  const [preguntasList, setPreguntasList] = useState<any[]>([]);
   const [misionsList, setMisionsList] = useState<any[]>([]);
   const [visionsList, setVisionsList] = useState<any[]>([]);
   const [valoresList, setValoresList] = useState<any[]>([]);
@@ -25,23 +21,12 @@ const PantallaDatosEmpresa: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [
-          empresaRes,
-          preguntasRes,
-          misionesRes,
-          visionesRes,
-          valoresRes,
-          politicasRes,
-        ] = await Promise.all([
-          axios.get<any>(`${API_BASE}/empresa`),
-          axios.get<any[]>(`${API_BASE}/empresa/preguntas`),
-          axios.get<any[]>(`${API_BASE}/empresa/misiones`),
-          axios.get<any[]>(`${API_BASE}/empresa/visiones`),
-          axios.get<any[]>(`${API_BASE}/empresa/valores`),
+        const [misionesRes, visionesRes, valoresRes, politicasRes] = await Promise.all([
+          axios.get<any[]>(`${API_BASE}/empresa/misions`),
+          axios.get<any[]>(`${API_BASE}/empresa/visions`),
+          axios.get<any[]>(`${API_BASE}/empresa/valors`),
           axios.get<any[]>(`${API_BASE}/empresa/politicas`),
         ]);
-        setEmpresaData(empresaRes.data);
-        setPreguntasList(preguntasRes.data);
         setMisionsList(misionesRes.data);
         setVisionsList(visionesRes.data);
         setValoresList(valoresRes.data);
@@ -55,22 +40,42 @@ const PantallaDatosEmpresa: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`${API_BASE}/empresa/actualizar-todos`, formData.empresa);
+      // Inserta los nuevos datos de misión, visión, valores y políticas
       await Promise.all([
-        formData.pregunta.pregunta &&
-          axios.post(`${API_BASE}/empresa/preguntas`, formData.pregunta),
         formData.mision &&
-          axios.post(`${API_BASE}/empresa/misiones`, { contenido: formData.mision }),
+          axios.post(`${API_BASE}/empresa/misions`, { contenido: formData.mision }),
         formData.vision &&
-          axios.post(`${API_BASE}/empresa/visiones`, { contenido: formData.vision }),
+          axios.post(`${API_BASE}/empresa/visions`, { contenido: formData.vision }),
         formData.valor &&
-          axios.post(`${API_BASE}/empresa/valores`, { contenido: formData.valor }),
+          axios.post(`${API_BASE}/empresa/valors`, { contenido: formData.valor }),
         formData.politica &&
           axios.post(`${API_BASE}/empresa/politicas`, { descripcion: formData.politica }),
       ]);
-      alert("Datos guardados con éxito");
+
+      alert("Datos insertados con éxito");
+
+      // Limpia los campos del formulario después de guardar
+      setFormData({
+        mision: "",
+        vision: "",
+        valor: "",
+        politica: "",
+      });
+
+      // Recarga los datos listados
+      const [misionesRes, visionesRes, valoresRes, politicasRes] = await Promise.all([
+        axios.get<any[]>(`${API_BASE}/empresa/misions`),
+        axios.get<any[]>(`${API_BASE}/empresa/visions`),
+        axios.get<any[]>(`${API_BASE}/empresa/valors`),
+        axios.get<any[]>(`${API_BASE}/empresa/politicas`),
+      ]);
+      setMisionsList(misionesRes.data);
+      setVisionsList(visionesRes.data);
+      setValoresList(valoresRes.data);
+      setPoliticasList(politicasRes.data);
     } catch (error) {
-      console.error("Error guardando datos:", error);
+      console.error("Error insertando datos:", error);
+      alert("Hubo un error al insertar los datos.");
     }
   };
 
@@ -78,61 +83,6 @@ const PantallaDatosEmpresa: React.FC = () => {
     <div style={styles.screen}>
       <div style={styles.cardContainer}>
         <h2 style={styles.title}>Configuración Empresarial</h2>
-
-        {/* Sección Datos Generales */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}>Datos Generales</h3>
-          <input
-            type="text"
-            style={styles.input}
-            placeholder="Ubicación"
-            value={formData.empresa.ubicacion}
-            onChange={(e) => setFormData({ ...formData, empresa: { ...formData.empresa, ubicacion: e.target.value } })}
-          />
-          <input
-            type="text"
-            style={styles.input}
-            placeholder="Teléfono"
-            value={formData.empresa.telefono}
-            onChange={(e) => setFormData({ ...formData, empresa: { ...formData.empresa, telefono: e.target.value } })}
-          />
-        </div>
-
-        {empresaData && (
-          <div style={styles.listContainer}>
-            <h3 style={styles.listTitle}>Datos de la Empresa:</h3>
-            <p>Ubicación: {empresaData.ubicacion}</p>
-            <p>Teléfono: {empresaData.telefono}</p>
-          </div>
-        )}
-
-        {/* Sección Preguntas */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}>Nueva Pregunta</h3>
-          <input
-            type="text"
-            style={styles.input}
-            placeholder="Pregunta"
-            value={formData.pregunta.pregunta}
-            onChange={(e) => setFormData({ ...formData, pregunta: { ...formData.pregunta, pregunta: e.target.value } })}
-          />
-          <input
-            type="text"
-            style={styles.input}
-            placeholder="Respuesta"
-            value={formData.pregunta.respuesta}
-            onChange={(e) => setFormData({ ...formData, pregunta: { ...formData.pregunta, respuesta: e.target.value } })}
-          />
-        </div>
-
-        {preguntasList.length > 0 && (
-          <div style={styles.listContainer}>
-            <h3 style={styles.listTitle}>Preguntas Frecuentes:</h3>
-            {preguntasList.map((item) => (
-              <p key={item._id}>Pregunta: {item.pregunta} <br /> Respuesta: {item.respuesta}</p>
-            ))}
-          </div>
-        )}
 
         {/* Sección Misión */}
         <div style={styles.section}>
@@ -210,7 +160,7 @@ const PantallaDatosEmpresa: React.FC = () => {
           </div>
         )}
 
-        <button style={styles.button} onClick={handleSubmit}>Guardar Cambios</button>
+        <button style={styles.button} onClick={handleSubmit}>Insertar Datos</button>
       </div>
     </div>
   );

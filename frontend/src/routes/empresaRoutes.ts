@@ -17,6 +17,7 @@ import {
   getValors,
   getPoliticas,
 } from '../controllers/empresaController';
+import { Pregunta } from '../models/empresaModel';
 
 const router = express.Router();
 
@@ -92,6 +93,68 @@ router.get('/politicas', async (req, res) => {
   }
 });
 
+// Ruta para obtener todas las preguntas
+router.get('/preguntas', async (req, res) => {
+  try {
+    const preguntas = await Pregunta.find().lean();
+    res.json(preguntas);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al obtener las preguntas' });
+  }
+});
+
+// Ruta para insertar una nueva misión
+router.post('/misions', async (req, res) => {
+  try {
+    const { contenido } = req.body; // Asegúrate de que el frontend envíe este campo
+    const nuevaMision = new Mision({ contenido });
+    await nuevaMision.save();
+    res.status(201).json(nuevaMision); // Devuelve la misión recién creada
+  } catch (err) {
+    console.error('Error al insertar misión:', err);
+    res.status(500).json({ message: 'Error al insertar misión' });
+  }
+});
+
+// Ruta para insertar una nueva visión
+router.post('/visions', async (req, res) => {
+  try {
+    const { contenido } = req.body;
+    const nuevaVision = new Vision({ contenido });
+    await nuevaVision.save();
+    res.status(201).json(nuevaVision);
+  } catch (err) {
+    console.error('Error al insertar visión:', err);
+    res.status(500).json({ message: 'Error al insertar visión' });
+  }
+});
+
+// Ruta para insertar un nuevo valor
+router.post('/valors', async (req, res) => {
+  try {
+    const { contenido } = req.body;
+    const nuevoValor = new Valor({ contenido });
+    await nuevoValor.save();
+    res.status(201).json(nuevoValor);
+  } catch (err) {
+    console.error('Error al insertar valor:', err);
+    res.status(500).json({ message: 'Error al insertar valor' });
+  }
+});
+
+// Ruta para insertar una nueva política
+router.post('/politicas', async (req, res) => {
+  try {
+    const { descripcion } = req.body;
+    const nuevaPolitica = new Politica({ descripcion });
+    await nuevaPolitica.save();
+    res.status(201).json(nuevaPolitica);
+  } catch (err) {
+    console.error('Error al insertar política:', err);
+    res.status(500).json({ message: 'Error al insertar política' });
+  }
+});
+
 // Rutas PUT y POST para crear y actualizar datos
 router.put('/empresa/actualizar-todos', updateEmpresaData);
 router.post('/empresa/preguntas', addPregunta);
@@ -107,5 +170,7 @@ router.get('/empresa/misiones', getMisions);
 router.get('/empresa/visiones', getVisions);
 router.get('/empresa/valores', getValors);
 router.get('/empresa/politicas', getPoliticas);
+
+console.log('Rutas de empresa cargadas');
 
 export default router;
