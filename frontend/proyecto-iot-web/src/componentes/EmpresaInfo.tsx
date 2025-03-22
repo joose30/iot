@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../css/EmpresaInfo.css';
 
 interface Mision {
   id: string;
-  contenido: string; // Cambiado de descripcion a contenido
+  contenido: string;
 }
 
 interface Vision {
   id: string;
-  contenido: string; // Cambiado de descripcion a contenido
+  contenido: string;
 }
 
 interface Valor {
   id: string;
-  contenido: string; // Cambiado de descripcion a contenido
+  contenido: string;
 }
 
 interface Politica {
   id: string;
-  descripcion: string; // Este permanece igual
+  descripcion: string;
 }
 
 const EmpresaInfo: React.FC = () => {
@@ -28,6 +29,8 @@ const EmpresaInfo: React.FC = () => {
   const [politica, setPolitica] = useState<Politica | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [activeSection, setActiveSection] = useState<string | null>(null); // Controla qué sección está abierta
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,11 +43,6 @@ const EmpresaInfo: React.FC = () => {
           axios.get('http://localhost:8082/api/empresa/valors'),
           axios.get('http://localhost:8082/api/empresa/politicas'),
         ]);
-
-        console.log('Misions:', misionRes.data); // Verifica qué datos llegan aquí
-        console.log('Visions:', visionRes.data);
-        console.log('Valors:', valorRes.data);
-        console.log('Politicas:', politicaRes.data);
 
         setMision(misionRes.data);
         setVision(visionRes.data);
@@ -64,28 +62,48 @@ const EmpresaInfo: React.FC = () => {
   if (loading) return <p>Cargando datos...</p>;
   if (error) return <p>{error}</p>;
 
+  const toggleSection = (section: string) => {
+    setActiveSection(activeSection === section ? null : section); // Alterna entre abrir y cerrar
+  };
+
   return (
-    <div>
+    <div className="empresa-info">
       <h1>Información de la Empresa</h1>
 
       <section>
-        <h2>Misión</h2>
-        <p>{mision ? mision.contenido : 'No hay misión disponible'}</p>
+        <h2 onClick={() => toggleSection('mision')} className="accordion-title">
+          Misión
+        </h2>
+        {activeSection === 'mision' && (
+          <p className="accordion-content">{mision ? mision.contenido : 'No hay misión disponible'}</p>
+        )}
       </section>
 
       <section>
-        <h2>Visión</h2>
-        <p>{vision ? vision.contenido : 'No hay visión disponible'}</p>
+        <h2 onClick={() => toggleSection('vision')} className="accordion-title">
+          Visión
+        </h2>
+        {activeSection === 'vision' && (
+          <p className="accordion-content">{vision ? vision.contenido : 'No hay visión disponible'}</p>
+        )}
       </section>
 
       <section>
-        <h2>Valores</h2>
-        <p>{valor ? valor.contenido : 'No hay valores disponibles'}</p>
+        <h2 onClick={() => toggleSection('valor')} className="accordion-title">
+          Valores
+        </h2>
+        {activeSection === 'valor' && (
+          <p className="accordion-content">{valor ? valor.contenido : 'No hay valores disponibles'}</p>
+        )}
       </section>
 
       <section>
-        <h2>Políticas</h2>
-        <p>{politica ? politica.descripcion : 'No hay políticas disponibles'}</p>
+        <h2 onClick={() => toggleSection('politica')} className="accordion-title">
+          Políticas
+        </h2>
+        {activeSection === 'politica' && (
+          <p className="accordion-content">{politica ? politica.descripcion : 'No hay políticas disponibles'}</p>
+        )}
       </section>
     </div>
   );
