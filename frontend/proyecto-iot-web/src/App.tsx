@@ -11,6 +11,7 @@ import PantallaAgregarProducto from "./componentes/PantallaAgregarProducto";
 import PantallaCatalogo from "./componentes/PantallaCatalogoProductos"; // Importa PantallaCatalogo
 import PantallaPuerta from "./componentes/PantallaPuerta"; // Importa PantallaPuerta
 import PantallaRfidControl from "./componentes/PantallaRfidControl"; // Importa PantallaRfidControl
+import EmpresaInfo from "./componentes/EmpresaInfo"; // Importa EmpresaInfo
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -27,7 +28,7 @@ const App: React.FC = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-empresa" element={<PantallaDatosEmpresa />} />
           <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
-          <Route path="/empresa" element={<PantallaCatalogo />} /> {/* Ruta para Empresa */}
+          <Route path="/empresa" element={<EmpresaInfo />} /> {/* Ruta para Empresa */}
           <Route path="/productos" element={<PantallaCatalogo />} /> {/* Ruta para Productos */}
           <Route path="/huella" element={<PantallaPuerta />} /> {/* Ruta para Huella */}
           <Route path="/dispositivo" element={<PantallaPuerta />} /> {/* Ruta para Dispositivo IoT */}
