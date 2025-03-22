@@ -22,10 +22,10 @@ interface Politica {
 }
 
 const EmpresaInfo: React.FC = () => {
-  const [misions, setMisions] = useState<Mision[]>([]);
-  const [visions, setVisions] = useState<Vision[]>([]);
-  const [valors, setValors] = useState<Valor[]>([]);
-  const [politicas, setPoliticas] = useState<Politica[]>([]);
+  const [mision, setMision] = useState<Mision | null>(null);
+  const [vision, setVision] = useState<Vision | null>(null);
+  const [valor, setValor] = useState<Valor | null>(null);
+  const [politica, setPolitica] = useState<Politica | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,18 +34,24 @@ const EmpresaInfo: React.FC = () => {
       try {
         setLoading(true);
 
-        const [misionsRes, visionsRes, valorsRes, politicasRes] = await Promise.all([
+        const [misionRes, visionRes, valorRes, politicaRes] = await Promise.all([
           axios.get('http://localhost:8082/api/empresa/misions'),
           axios.get('http://localhost:8082/api/empresa/visions'),
           axios.get('http://localhost:8082/api/empresa/valors'),
           axios.get('http://localhost:8082/api/empresa/politicas'),
         ]);
 
-        setMisions(misionsRes.data);
-        setVisions(visionsRes.data);
-        setValors(valorsRes.data);
-        setPoliticas(politicasRes.data);
+        console.log('Misions:', misionRes.data); // Verifica qué datos llegan aquí
+        console.log('Visions:', visionRes.data);
+        console.log('Valors:', valorRes.data);
+        console.log('Politicas:', politicaRes.data);
+
+        setMision(misionRes.data);
+        setVision(visionRes.data);
+        setValor(valorRes.data);
+        setPolitica(politicaRes.data);
       } catch (err) {
+        console.error(err);
         setError('Error al cargar los datos.');
       } finally {
         setLoading(false);
@@ -64,38 +70,22 @@ const EmpresaInfo: React.FC = () => {
 
       <section>
         <h2>Misión</h2>
-        <ul>
-          {misions.map((mision) => (
-            <li key={mision.id}>{mision.contenido}</li>
-          ))}
-        </ul>
+        <p>{mision ? mision.contenido : 'No hay misión disponible'}</p>
       </section>
 
       <section>
         <h2>Visión</h2>
-        <ul>
-          {visions.map((vision) => (
-            <li key={vision.id}>{vision.contenido}</li> 
-          ))}
-        </ul>
+        <p>{vision ? vision.contenido : 'No hay visión disponible'}</p>
       </section>
 
       <section>
         <h2>Valores</h2>
-        <ul>
-          {valors.map((valor) => (
-            <li key={valor.id}>{valor.contenido}</li> 
-          ))}
-        </ul>
+        <p>{valor ? valor.contenido : 'No hay valores disponibles'}</p>
       </section>
 
       <section>
         <h2>Políticas</h2>
-        <ul>
-          {politicas.map((politica) => (
-            <li key={politica.id}>{politica.descripcion}</li>
-          ))}
-        </ul>
+        <p>{politica ? politica.descripcion : 'No hay políticas disponibles'}</p>
       </section>
     </div>
   );

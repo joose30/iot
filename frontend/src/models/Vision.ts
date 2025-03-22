@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 const VisionSchema = new mongoose.Schema({
-  descripcion: { type: String, required: true },
+  contenido: { type: String, required: true }, // Campo "contenido" definido correctamente
 });
 
-const Vision = mongoose.model('Vision', VisionSchema);
+const Vision = mongoose.models.Vision || mongoose.model('Vision', VisionSchema);
 
 export default Vision;
