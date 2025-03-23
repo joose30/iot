@@ -28,7 +28,7 @@ const PantallaInicio: React.FC = () => {
   }, []);
 
   // Coordenadas de Huejutla de Reyes, Hidalgo
-  const huejutlaLocation: L.LatLngExpression = [21.141092, -98.4204785];
+  const huejutlaLocation: L.LatLngExpression = [21.1416751, -98.4201608];
 
   return (
     <div style={styles.screen}>
