@@ -1,5 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// Configuración del ícono del marcador (necesario para React Leaflet)
+const icon = L.icon({
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 const PantallaInicio: React.FC = () => {
   const [activeOption, setActiveOption] = useState<string>("Empresa");
@@ -12,6 +26,9 @@ const PantallaInicio: React.FC = () => {
       setUserName(name);
     }
   }, []);
+
+  // Coordenadas de Huejutla de Reyes, Hidalgo
+  const huejutlaLocation: L.LatLngExpression = [21.141092, -98.4204785];
 
   return (
     <div style={styles.screen}>
@@ -34,6 +51,25 @@ const PantallaInicio: React.FC = () => {
           </p>
         </div>
 
+        {/* Mapa de ubicación */}
+        <div style={styles.mapContainer}>
+          <MapContainer
+            center={huejutlaLocation} // Coordenadas de Huejutla
+            zoom={13} // Nivel de zoom
+            style={styles.map}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={huejutlaLocation} icon={icon}>
+              <Popup>
+                Huejutla de Reyes, Hidalgo
+              </Popup>
+            </Marker>
+          </MapContainer>
+        </div>
+
         {/* Sección de Preguntas Frecuentes */}
         <div style={styles.faqSection}>
           <div style={styles.faqItem}>
@@ -45,9 +81,6 @@ const PantallaInicio: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Botón de Cerrar Sesión */}
-      <button style={styles.logoutButton}>Cerrar sesión</button>
     </div>
   );
 };
@@ -86,33 +119,6 @@ const styles: Record<string, React.CSSProperties> = {
     textTransform: "uppercase",
     letterSpacing: "1px",
   },
-  /* Menú Opciones en horizontal */
-  menuContainer: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: "20px",
-    marginTop: "15px",
-    backgroundColor: "#FFFFFF",
-    padding: "12px",
-    borderRadius: "8px",
-    boxShadow: "0px 3px 12px rgba(0, 0, 0, 0.1)",
-  },
-  menuOption: {
-    fontSize: "16px",
-    cursor: "pointer",
-    textDecoration: "none",
-    padding: "10px 20px",
-    transition: "color 0.3s ease, transform 0.2s",
-    fontWeight: "500",
-    color: "#333",
-  },
-  menuOptionActive: {
-    borderBottom: "3px solid #FF3B3B",
-    fontWeight: "bold",
-    transform: "translateY(-2px)",
-    color: "#D32F2F",
-  },
   /* Sección Hero */
   heroSection: {
     marginTop: "30px",
@@ -136,6 +142,17 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: "8px",
     marginBottom: "12px",
   },
+  /* Mapa */
+  mapContainer: {
+    marginTop: "20px",
+    height: "400px", // Altura del mapa
+    borderRadius: "12px",
+    overflow: "hidden",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
   /* Sección Preguntas Frecuentes */
   faqSection: {
     marginTop: "35px",
@@ -152,51 +169,6 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#2C2C2C",
     marginBottom: "5px",
   },
-  /* Footer */
-  footer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "30px",
-    borderTop: "1px solid #E0E0E0",
-    paddingTop: "12px",
-    color: "#333",
-  },
-  footerLeft: {
-    flex: 1,
-  },
-  footerRight: {
-    flex: 1,
-    textAlign: "right",
-  },
-  footerText: {
-    fontSize: "16px",
-    color: "#2C2C2C",
-    marginBottom: "5px",
-    cursor: "pointer",
-    transition: "color 0.2s",
-  },
-  footerTitle: {
-    fontWeight: "bold",
-    fontSize: "18px",
-    marginTop: "10px",
-    textTransform: "uppercase",
-  },
-  /* Botón de Cerrar Sesión */
-  logoutButton: {
-    marginTop: "30px",
-    backgroundColor: "#007BFF",
-    color: "#FFFFFF",
-    padding: "14px 30px",
-    borderRadius: "8px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    border: "none",
-    cursor: "pointer",
-    transition: "background 0.3s",
-  },
-  container: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", fontFamily: "Arial, sans-serif", textAlign: "center" as "center" },
-  title: { fontSize: "32px", fontWeight: "bold", marginBottom: "20px" },
-  subtitle: { fontSize: "18px", color: "#555" },
 };
 
 export default PantallaInicio;
