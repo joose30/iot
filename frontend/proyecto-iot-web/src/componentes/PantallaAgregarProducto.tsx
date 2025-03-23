@@ -11,12 +11,13 @@ const PantallaAgregarProducto: React.FC = () => {
   const handleAddProduct = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.8.6:8082/api/products/add",
+        "http://localhost:8082/api/products/add", //(IPCONFIG)
         {
           name,
           description,
           price,
           category,
+          image: " ", // Campo adicional (puede ser una cadena vacía si no es obligatorio)
         }
       );
       if (response.status === 201) {

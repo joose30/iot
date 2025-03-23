@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db'; // Importando la conexión a la base de datos
 import doorRoutes from './src/routes/doorRoutes';  // Rutas para el control de la puerta
 import userRoutes from './src/routes/userRoutes'; // Importa las rutas de usuarios
+import empresaRoutes from './src/routes/empresaRoutes';
+import productRoutes from './src/routes/productRoutes';
 
 dotenv.config(); // Cargando las variables de entorno desde .env
 
@@ -30,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/door', doorRoutes);  // Rutas para el control de la puerta
 // Agrega la ruta de usuarios
 app.use('/api/users', userRoutes);
+app.use('/api/empresa', empresaRoutes);
+app.use('/api/products', productRoutes); // Rutas para el control de productos
 
 // Iniciar servidor
 app.listen(PORT, () => {

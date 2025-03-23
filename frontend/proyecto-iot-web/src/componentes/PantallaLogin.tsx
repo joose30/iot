@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Definir la interfaz para la respuesta del servidor
+interface LoginResponse {
+  message: string;
+  name: string;
+  role: string;
+}
+
 const PantallaLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +19,7 @@ const PantallaLogin: React.FC = () => {
 
     try {
       // Enviar las credenciales al backend
-      const response = await axios.post("http://localhost:8082/api/users/login", {
+      const response = await axios.post<LoginResponse>("http://localhost:8082/api/users/login", { //(IPCONFIG)
         email,
         password,
       }, {

@@ -54,9 +54,6 @@ const Header: React.FC = () => {
                 <Link to="/productos" style={styles.navLink}>Productos</Link>
               </li>
               <li style={styles.navItem}>
-                <Link to="/huella" style={styles.navLink}>Huella</Link>
-              </li>
-              <li style={styles.navItem}>
                 <Link to="/dispositivo" style={styles.navLink}>Dispositivo IoT</Link>
               </li>
               <li style={styles.navItem}>
