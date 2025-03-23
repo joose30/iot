@@ -17,19 +17,19 @@ export default function PantallaCatalogoProductos() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:8082/api/products/get'); //(IPCONFIG)
-                if (response.status === 200) {
-                    setProducts(response.data as Product[]);
-                }
-            } catch (err) {
-                setError('Error al cargar los productos');
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8082/api/products/get");
+        if (response.status === 200) {
+          setProducts(response.data as Product[]);
+        }
+      } catch (err) {
+        setError("Error al cargar los productos");
+      } finally {
+        setLoading(false);
+      }
+    };
 
         fetchProducts();
     }, []);
