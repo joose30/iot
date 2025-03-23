@@ -22,7 +22,7 @@ import { Pregunta } from '../models/empresaModel';
 const router = express.Router();
 
 // Ruta para obtener la última misión
-router.get('/misions', async (req, res) => {
+router.get('/empresa/misions', async (req, res) => {
   try {
     const misions = await Mision.find().sort({ _id: -1 }).limit(1).lean(); // Obtiene el último registro
     if (misions.length > 0) {
@@ -40,7 +40,7 @@ router.get('/misions', async (req, res) => {
 });
 
 // Ruta para obtener la última visión
-router.get('/visions', async (req, res) => {
+router.get('/empresa/visions', async (req, res) => {
   try {
     const visions = await Vision.find().sort({ _id: -1 }).limit(1).lean();
     if (visions.length > 0) {
@@ -58,7 +58,7 @@ router.get('/visions', async (req, res) => {
 });
 
 // Ruta para obtener el último valor
-router.get('/valors', async (req, res) => {
+router.get('/empresa/valors', async (req, res) => {
   try {
     const valors = await Valor.find().sort({ _id: -1 }).limit(1).lean();
     if (valors.length > 0) {
@@ -76,7 +76,7 @@ router.get('/valors', async (req, res) => {
 });
 
 // Ruta para obtener la última política
-router.get('/politicas', async (req, res) => {
+router.get('/empresa/politicas', async (req, res) => {
   try {
     const politicas = await Politica.find().sort({ _id: -1 }).limit(1).lean();
     if (politicas.length > 0) {
@@ -94,7 +94,7 @@ router.get('/politicas', async (req, res) => {
 });
 
 // Ruta para obtener todas las preguntas
-router.get('/preguntas', async (req, res) => {
+router.get('/empresa/preguntas', async (req, res) => {
   try {
     const preguntas = await Pregunta.find().lean();
     res.json(preguntas);
@@ -104,7 +104,7 @@ router.get('/preguntas', async (req, res) => {
 });
 
 // Ruta para insertar una nueva misión
-router.post('/misions', async (req, res) => {
+router.post('/empresa/misions', async (req, res) => {
   try {
     const { contenido } = req.body; // Asegúrate de que el frontend envíe este campo
     const nuevaMision = new Mision({ contenido });
@@ -117,7 +117,7 @@ router.post('/misions', async (req, res) => {
 });
 
 // Ruta para insertar una nueva visión
-router.post('/visions', async (req, res) => {
+router.post('/empresa/visions', async (req, res) => {
   try {
     const { contenido } = req.body;
     const nuevaVision = new Vision({ contenido });
@@ -130,7 +130,7 @@ router.post('/visions', async (req, res) => {
 });
 
 // Ruta para insertar un nuevo valor
-router.post('/valors', async (req, res) => {
+router.post('/empresa/valors', async (req, res) => {
   try {
     const { contenido } = req.body;
     const nuevoValor = new Valor({ contenido });
@@ -143,7 +143,7 @@ router.post('/valors', async (req, res) => {
 });
 
 // Ruta para insertar una nueva política
-router.post('/politicas', async (req, res) => {
+router.post('/empresa/politicas', async (req, res) => {
   try {
     const { descripcion } = req.body;
     const nuevaPolitica = new Politica({ descripcion });
@@ -166,9 +166,9 @@ router.post('/empresa/politicas', addPolitica);
 // Rutas GET para obtener datos
 router.get('/empresa', getEmpresa);
 router.get('/empresa/preguntas', getPreguntas);
-router.get('/empresa/misiones', getMisions);
-router.get('/empresa/visiones', getVisions);
-router.get('/empresa/valores', getValors);
+router.get('/empresa/misions', getMisions);
+router.get('/empresa/visions', getVisions);
+router.get('/empresa/valors', getValors);
 router.get('/empresa/politicas', getPoliticas);
 
 console.log('Rutas de empresa cargadas');

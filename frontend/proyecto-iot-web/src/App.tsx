@@ -12,6 +12,7 @@ import PantallaCatalogo from "./componentes/PantallaCatalogoProductos"; // Impor
 import PantallaPuerta from "./componentes/PantallaPuerta"; // Importa PantallaPuerta
 import PantallaRfidControl from "./componentes/PantallaRfidControl"; // Importa PantallaRfidControl
 import EmpresaInfo from "./componentes/EmpresaInfo"; // Importa EmpresaInfo
+import PantallaProductoDetail from './componentes/PantallaProductoDetail';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ const App: React.FC = () => {
           <Route path="/dispositivo" element={<PantallaPuerta />} /> {/* Ruta para Dispositivo IoT */}
           <Route path="/rfid" element={<PantallaRfidControl />} /> {/* Ruta para RFID */}
           <Route path="/perfil" element={<PantallaInicio />} /> {/* Ruta para Perfil */}
+          <Route path="/productoDetail" element={<PantallaProductoDetail />} />
         </Routes>
       </div>
       {/* Mostrar el Foother solo si no estamos en la pantalla de login */}
