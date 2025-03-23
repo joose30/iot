@@ -76,6 +76,12 @@ const PantallaLogin: React.FC = () => {
           Regístrate aquí
         </a>
       </p>
+      <p>
+        ¿Olvidaste tu contraseña?{" "}
+        <a href="/recover-password" style={{ color: "#007bff", textDecoration: "none" }}>
+          Recuperar contraseña
+        </a>
+      </p>
     </div>
   );
 };

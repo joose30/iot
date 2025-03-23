@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 app.use('/api/door', doorRoutes);  // Rutas para el control de la puerta
-app.use('/api/users', userRoutes); // Rutas de usuarios
+app.use('/api/users', userRoutes); // Registra las rutas de usuarios
 app.use('/api/empresa', empresaRoutes); // Rutas de empresa
 app.use('/api/products', productRoutes); // Rutas de productos
 

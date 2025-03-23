@@ -1,6 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
+import { recoverPassword } from '../controllers/userController';
 
 const router = express.Router();
 
@@ -57,5 +58,8 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor', error });
   }
 });
+
+// Ruta para recuperación de contraseña
+router.post('/recover-password', recoverPassword);
 
 export default router;
