@@ -9,29 +9,30 @@ export const recoverPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   try {
-    // Verificar si el correo existe en la base de datos
+    // Buscar al usuario por su correo
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'El correo no está registrado' });
     }
 
-    // Crear un token de recuperación (puedes usar JWT o un UUID)
-    const recoveryToken = Math.random().toString(36).substr(2); // Token simple para ejemplo
-    // Aquí podrías guardar el token en la base de datos asociado al usuario
+    // Generar un token de recuperación
+    const recoveryToken = Math.random().toString(36).substr(2);
+    user.recoveryToken = recoveryToken; // Guardar el token en el usuario
+    await user.save();
 
     // Configurar el transporte de Nodemailer
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // Puedes usar otros servicios como Outlook, Yahoo, etc.
+      service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER, // Correo electrónico desde las variables de entorno
-        pass: process.env.EMAIL_PASS, // Contraseña de aplicación desde las variables de entorno
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // Configurar el contenido del correo
     const mailOptions = {
-      from: process.env.EMAIL_USER, // Remitente
-      to: email, // Destinatario
+      from: process.env.EMAIL_USER,
+      to: email,
       subject: 'Recuperación de contraseña',
       html: `
         <h1>Recuperación de contraseña</h1>

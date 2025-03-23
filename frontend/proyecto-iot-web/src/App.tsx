@@ -13,6 +13,7 @@ import PantallaPuerta from "./componentes/PantallaPuerta"; // Importa PantallaPu
 import PantallaRfidControl from "./componentes/PantallaRfidControl"; // Importa PantallaRfidControl
 import EmpresaInfo from "./componentes/EmpresaInfo"; // Importa EmpresaInfo
 import PantallaRecuperarContraseña from "./componentes/PantallaRecuperarContraseña"; // Importa PantallaRecuperarContraseña
+import PantallaRestablecerContraseña from "./componentes/PantallaRestablecerContraseña"; // Importa PantallaRestablecerContraseña
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const App: React.FC = () => {
           <Route path="/perfil" element={<PantallaInicio />} /> {/* Ruta para Perfil */}
           <Route path="/login" element={<PantallaLogin />} /> {/* Ruta para Login */}
           <Route path="/recover-password" element={<PantallaRecuperarContraseña />} /> {/* Ruta para Recuperar Contraseña */}
+          <Route path="/reset-password/:token" element={<PantallaRestablecerContraseña />} /> {/* Ruta para Restablecer Contraseña */}
         </Routes>
       </div>
       {/* Mostrar el Foother solo si no estamos en la pantalla de login */}

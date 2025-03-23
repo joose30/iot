@@ -62,4 +62,35 @@ router.post('/register', async (req, res) => {
 // Ruta para recuperación de contraseña
 router.post('/recover-password', recoverPassword);
 
+// Ruta para restablecer la contraseña
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+    // Buscar al usuario por el token de recuperación
+    const user = await User.findOne({ recoveryToken: token });
+    if (!user) {
+      return res.status(400).json({ message: 'Token inválido o expirado' });
+    }
+
+    // Verificar que el token no sea null (aunque ya lo validamos con la consulta)
+    if (!user.recoveryToken) {
+      return res.status(400).json({ message: 'Token inválido o expirado' });
+    }
+
+    // Hashear la nueva contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Actualizar la contraseña y limpiar el token de recuperación
+    user.password = hashedPassword;
+    user.recoveryToken = null; // Limpia el token de recuperación
+    await user.save();
+
+    res.status(200).json({ message: 'Contraseña restablecida correctamente' });
+  } catch (error) {
+    console.error('Error al restablecer la contraseña:', error);
+    res.status(500).json({ message: 'Error al procesar la solicitud.' });
+  }
+});
+
 export default router;

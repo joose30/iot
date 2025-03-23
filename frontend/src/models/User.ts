@@ -1,30 +1,28 @@
-// filepath: c:\Users\AlfredoHH\Documents\GitHub\web\Integrador\frontend\src\models\User.ts
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose, { Document } from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Nuevo campo
-  lastName: { type: String, required: true }, // Nuevo campo
-  surname: { type: String, required: true }, // Nuevo campo
-  phone: { type: String, required: true }, // Nuevo campo
+// Define una interfaz para el modelo User
+export interface IUser extends Document {
+  name: string;
+  lastName: string;
+  surname: string;
+  phone: string;
+  email: string;
+  password: string;
+  role: string;
+  recoveryToken: string | null; // Permitir que sea string o null
+}
+
+const userSchema = new mongoose.Schema<IUser>({
+  name: { type: String, required: true },
+  lastName: { type: String, required: true },
+  surname: { type: String, required: true },
+  phone: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'user'], default: 'user' }, // Campo para roles
+  role: { type: String, default: 'user' },
+  recoveryToken: { type: String, default: null },
 });
 
-// Middleware para cifrar la contraseña antes de guardar
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); // Solo cifra si la contraseña ha sido modificada
-
-  try {
-    const salt = await bcrypt.genSalt(10); // Genera un salt
-    this.password = await bcrypt.hash(this.password, salt); // Cifra la contraseña
-    next();
-  } catch (error) {
-    next(error as mongoose.CallbackError);
-  }
-});
-
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model<IUser>('User', userSchema);
 
 export default User;
