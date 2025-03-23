@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 import User from '../models/User'; // Asegúrate de importar el modelo correcto
+import dotenv from 'dotenv';
+
+dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
 export const recoverPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -20,14 +23,14 @@ export const recoverPassword = async (req: Request, res: Response) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail', // Puedes usar otros servicios como Outlook, Yahoo, etc.
       auth: {
-        user: 'tu_correo@gmail.com', // Tu correo electrónico
-        pass: 'tu_contraseña', // Tu contraseña o app password
+        user: process.env.EMAIL_USER, // Correo electrónico desde las variables de entorno
+        pass: process.env.EMAIL_PASS, // Contraseña de aplicación desde las variables de entorno
       },
     });
 
     // Configurar el contenido del correo
     const mailOptions = {
-      from: 'tu_correo@gmail.com', // Remitente
+      from: process.env.EMAIL_USER, // Remitente
       to: email, // Destinatario
       subject: 'Recuperación de contraseña',
       html: `
