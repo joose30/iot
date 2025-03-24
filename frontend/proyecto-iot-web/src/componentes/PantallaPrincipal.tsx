@@ -1,3 +1,4 @@
+// Ruta IntegradoraWEB\frontend\proyecto-iot-web\src\componentes\PantallaPrincipal.tsx <-Ruta
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -84,7 +85,7 @@ const PantallaInicio: React.FC = () => {
         {/* Sección Hero */}
         <div style={styles.heroSection}>
           <img
-            src="../images/puertaIOT-pantallaPrincipal.jpg"
+            src="https://res.cloudinary.com/dnwpy45qa/image/upload/v1742828362/zvpz8trkvzartzl89nes.jpg" // Reemplaza con la URL de tu imagen
             alt="Puerta Inteligente"
             style={styles.heroImage}
           />
