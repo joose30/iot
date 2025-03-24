@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import axios from "axios";
+import HeaderPublico from "./HeaderPublico";
+import FooterPublico from "./FootherPublico";
 
 const icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -14,52 +15,8 @@ const icon = L.icon({
   shadowSize: [41, 41],
 });
 
-interface FAQ {
-  _id: string;
-  pregunta: string;
-  respuesta: string;
-}
-
 const PantallaInicioPublica: React.FC = () => {
-  const [faqs, setFaqs] = useState<FAQ[]>([]);
-  const [loadingFaqs, setLoadingFaqs] = useState(true);
-  const [error, setError] = useState("");
-  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const huejutlaLocation: L.LatLngExpression = [21.1416751, -98.4201608];
-
-  useEffect(() => {
-    const fetchFAQs = async () => {
-      try {
-        setLoadingFaqs(true);
-        const response = await axios.get<FAQ[]>("http://localhost:8082/api/preguntasFrecuentes");
-        setFaqs(response.data);
-        setError("");
-      } catch (err) {
-        console.error("Error al cargar preguntas frecuentes:", err);
-        setError("No se pudieron cargar las preguntas frecuentes");
-        setFaqs([
-          { 
-            _id: "1", 
-            pregunta: "¿Para qué sirve Segurix?", 
-            respuesta: "Segurix es una plataforma para gestionar y controlar dispositivos IoT de seguridad." 
-          },
-          { 
-            _id: "2", 
-            pregunta: "¿Cómo conectar mi dispositivo IoT?", 
-            respuesta: "Ve a la sección de dispositivos y sigue las instrucciones de configuración." 
-          },
-        ]);
-      } finally {
-        setLoadingFaqs(false);
-      }
-    };
-
-    fetchFAQs();
-  }, []);
-
-  const toggleFaqExpansion = (id: string) => {
-    setExpandedFaq(expandedFaq === id ? null : id);
-  };
 
   return (
     <div style={styles.screen as React.CSSProperties}>
@@ -86,41 +43,6 @@ const PantallaInicioPublica: React.FC = () => {
               <Popup>Huejutla de Reyes, Hidalgo</Popup>
             </Marker>
           </MapContainer>
-        </div>
-
-        {/* Sección de Preguntas Frecuentes */}
-        <div style={styles.faqSection as React.CSSProperties}>
-          <h3 style={styles.faqTitle as React.CSSProperties}>Preguntas Frecuentes</h3>
-
-          {loadingFaqs ? (
-            <div style={styles.loadingContainer as React.CSSProperties}>
-              <p>Cargando preguntas...</p>
-            </div>
-          ) : error ? (
-            <div style={styles.errorContainer as React.CSSProperties}>
-              <p>{error}</p>
-            </div>
-          ) : (
-            faqs.map((faq) => (
-              <div key={faq._id} style={styles.faqItem as React.CSSProperties}>
-                <div
-                  style={styles.faqQuestion as React.CSSProperties}
-                  onClick={() => toggleFaqExpansion(faq._id)}
-                >
-                  <p style={styles.faqQuestionText as React.CSSProperties}>{faq.pregunta}</p>
-                  <span style={styles.faqToggleIcon as React.CSSProperties}>
-                    {expandedFaq === faq._id ? "▲" : "▼"}
-                  </span>
-                </div>
-
-                {expandedFaq === faq._id && (
-                  <div style={styles.faqAnswer as React.CSSProperties}>
-                    <p style={styles.faqAnswerText as React.CSSProperties}>{faq.respuesta}</p>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
         </div>
       </div>
     </div>
@@ -174,55 +96,6 @@ const styles = {
   map: {
     width: "100%",
     height: "100%",
-  },
-  /* Sección Preguntas Frecuentes */
-  faqSection: {
-    marginTop: "35px",
-  },
-  faqItem: {
-    backgroundColor: "#F5F5F5",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    marginBottom: "8px",
-    cursor: "pointer",
-  },
-  faqQuestion: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  faqQuestionText: {
-    fontSize: "16px",
-    fontWeight: "500",
-    color: "#1E1E1E",
-  },
-  faqToggleIcon: {
-    fontSize: "14px",
-    color: "#1E1E1E",
-  },
-  faqAnswer: {
-    marginTop: "10px",
-    paddingTop: "10px",
-    borderTop: "1px solid #E0E0E0",
-  },
-  faqAnswerText: {
-    fontSize: "14px",
-    color: "#333",
-  },
-  loadingContainer: {
-    textAlign: "center",
-    padding: "20px",
-  },
-  errorContainer: {
-    backgroundColor: "#ffebee",
-    padding: "15px",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-  faqTitle: {
-    fontSize: "22px",
-    fontWeight: "bold",
-    marginBottom: "15px",
   }
 };
 
