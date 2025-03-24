@@ -14,6 +14,8 @@ type Product = {
 export default function PantallaCatalogoProductos() {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]); // Lista de categorías
+  const [selectedCategory, setSelectedCategory] = useState<string>(''); // Categoría seleccionada
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1); // Página actual
@@ -33,19 +35,35 @@ export default function PantallaCatalogoProductos() {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:8082/api/products/categories");
+        if (response.status === 200) {
+          setCategories(response.data);
+        }
+      } catch (err) {
+        console.error("Error al cargar las categorías:", err);
+      }
+    };
+
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const handleProductClick = (product: Product) => {
     navigate(`/productoDetail`, { state: { product } });
   };
 
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const handleNextPage = () => {
-    if (currentPage < Math.ceil(products.length / productsPerPage)) {
+    if (currentPage < Math.ceil(filteredProducts.length / productsPerPage)) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -68,6 +86,22 @@ export default function PantallaCatalogoProductos() {
     <div style={styles.screen}>
       <div style={styles.cardContainer}>
         <h2 style={styles.title}>Catálogo de Productos</h2>
+
+        <div style={styles.filterContainer}>
+          <label style={styles.filterLabel}>Categoría:</label>
+          <select
+            style={styles.filterSelect}
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Todas</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div style={styles.productList}>
           {currentProducts.map((product) => (
@@ -100,12 +134,12 @@ export default function PantallaCatalogoProductos() {
             Anterior
           </button>
           <span style={styles.paginationInfo}>
-            Página {currentPage} de {Math.ceil(products.length / productsPerPage)}
+            Página {currentPage} de {Math.ceil(filteredProducts.length / productsPerPage)}
           </span>
           <button
             style={styles.paginationButton}
             onClick={handleNextPage}
-            disabled={currentPage === Math.ceil(products.length / productsPerPage)}
+            disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)}
           >
             Siguiente
           </button>
@@ -138,6 +172,23 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 'bold',
     color: '#1E1E1E',
     marginTop: '18px',
+  },
+  filterContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '20px',
+    gap: '10px',
+  },
+  filterLabel: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+  },
+  filterSelect: {
+    padding: '10px',
+    fontSize: '16px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   productList: {
     display: 'grid',
