@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// En HeaderPublico.tsx
 const HeaderPublico: React.FC = () => {
   return (
     <header style={styles.header}>
@@ -13,17 +14,16 @@ const HeaderPublico: React.FC = () => {
             <Link to="/login" style={styles.navLink}>Empieza ahora</Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/empresa" style={styles.navLink}>Empresa</Link>
+            <Link to="/empresaPublico" style={styles.navLink}>Empresa</Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/productos" style={styles.navLink}>Productos</Link>
+            <Link to="/productosPublico" style={styles.navLink}>Productos</Link>
           </li>
         </ul>
       </nav>
     </header>
   );
 };
-
 const styles = {
   header: {
     display: "flex",
