@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
-export const recoverPassword = async (req: Request, recoveryToken: string, res: Response) => {
+export const recoverPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   try {
@@ -15,8 +15,9 @@ export const recoverPassword = async (req: Request, recoveryToken: string, res: 
       return res.status(404).json({ message: 'El correo no está registrado' });
     }
 
-    // Guardar el token en el usuario
-    user.recoveryToken = recoveryToken;
+    // Generar un token de recuperación
+    const recoveryToken = Math.random().toString(36).substr(2);
+    user.recoveryToken = recoveryToken; // Guardar el token en el usuario
     await user.save();
 
     // Configurar el transporte de Nodemailer
@@ -45,9 +46,9 @@ export const recoverPassword = async (req: Request, recoveryToken: string, res: 
     // Enviar el correo
     await transporter.sendMail(mailOptions);
 
-    console.log('Correo enviado a:', email);
+    res.status(200).json({ message: 'Se ha enviado un enlace de recuperación a tu correo.' });
   } catch (error) {
     console.error('Error al enviar el correo de recuperación:', error);
-    throw new Error('Error al enviar el correo');
+    res.status(500).json({ message: 'Error al procesar la solicitud.' });
   }
 };

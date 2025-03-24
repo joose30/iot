@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,25 +12,8 @@ const PantallaRegistro: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [secretQuestion, setSecretQuestion] = useState("");
-  const [secretAnswer, setSecretAnswer] = useState("");
-  const [questions, setQuestions] = useState<{ id: string; pregunta: string }[]>([]);
 
-  const navigate = useNavigate();
-
-  // Obtener las preguntas secretas desde la base de datos
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await axios.get("http://localhost:8082/api/users/secret-questions");
-        setQuestions(response.data);
-      } catch (error) {
-        console.error("Error al obtener las preguntas secretas:", error);
-      }
-    };
-
-    fetchQuestions();
-  }, []);
+  const navigate = useNavigate(); // Hook para redirigir
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -39,7 +22,7 @@ const PantallaRegistro: React.FC = () => {
     if (password !== value) {
       setPasswordError("Las contraseñas no coinciden");
     } else {
-      setPasswordError("");
+      setPasswordError(""); // Limpiar el mensaje de error si coinciden
     }
   };
 
@@ -55,11 +38,6 @@ const PantallaRegistro: React.FC = () => {
       return;
     }
 
-    if (!secretQuestion || !secretAnswer) {
-      alert("Debes seleccionar una pregunta secreta y proporcionar una respuesta");
-      return;
-    }
-
     try {
       const response = await axios.post("http://localhost:8082/api/users/register", {
         name,
@@ -68,13 +46,12 @@ const PantallaRegistro: React.FC = () => {
         phone,
         email,
         password,
-        secretQuestion,
-        secretAnswer,
       });
 
       if (response.status === 201) {
         alert("Usuario registrado exitosamente");
-        navigate("/login");
+        navigate("/login"); // Redirigir al login
+        window.location.reload(); // Recargar la página
       }
     } catch (error: any) {
       if (error.response) {
@@ -177,31 +154,6 @@ const PantallaRegistro: React.FC = () => {
           </button>
         </div>
         {passwordError && <p style={styles.error}>{passwordError}</p>}
-
-        <label style={styles.label}>Pregunta secreta</label>
-        <select
-          value={secretQuestion}
-          onChange={(e) => setSecretQuestion(e.target.value)}
-          required
-          style={styles.input}
-        >
-          <option value="">Selecciona una pregunta</option>
-          {questions.map((q) => (
-            <option key={q.id} value={q.pregunta}>
-              {q.pregunta}
-            </option>
-          ))}
-        </select>
-
-        <label style={styles.label}>Respuesta</label>
-        <input
-          type="text"
-          value={secretAnswer}
-          onChange={(e) => setSecretAnswer(e.target.value)}
-          placeholder="Ingresa tu respuesta"
-          required
-          style={styles.input}
-        />
 
         <button type="submit" style={styles.button}>
           Registrarse

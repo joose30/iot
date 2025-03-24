@@ -23,7 +23,6 @@ import PantallaProductoDetail from "./componentes/PantallaProductoDetail";
 import PantallaProductoDetailPublica from "./componentes/PantallaProductoDetailPublica";
 import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario";
 import GestionarUsuarios from "./componentes/GestionarUsuarios";
-import PantallaRecuperarConPregunta from "./componentes/PantallaRecuperarConPregunta"; // Importa PantallaRecuperarConPregunta
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -67,8 +66,6 @@ const App: React.FC = () => {
           <Route path="/empresaPublico" element={<EmpresaInfoPublica />} />
           <Route path="/productosPublico" element={<PantallaCatalogoProductosPublica />} />
           <Route path="/productoDetailPublico" element={<PantallaProductoDetailPublica />} />
-          <Route path="/recuperar-contraseña" element={<PantallaRecuperarContraseña />} /> {/* Ruta para Recuperar Contraseña */}
-          <Route path="/recuperar-con-pregunta" element={<PantallaRecuperarConPregunta />} /> {/* Ruta para Recuperar con Pregunta */}
           
           {/* ========== RUTAS PRIVADAS ========== */}
           <Route path="/home" element={isAuthenticated ? <PantallaInicio /> : <Navigate to="/login" />} />
