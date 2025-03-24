@@ -13,7 +13,17 @@ const PantallaAgregarProducto: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+
+      // Validar el tipo de archivo
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
+      if (!validImageTypes.includes(file.type)) {
+        alert("Por favor selecciona un archivo de imagen válido (jpg, jpeg, png, gif).");
+        e.target.value = ""; // Limpiar el input de archivo
+        return;
+      }
+
+      setImage(file); // Si es válido, guardar el archivo
     }
   };
 
@@ -148,8 +158,6 @@ const PantallaAgregarProducto: React.FC = () => {
     </div>
   );
 };
-
-// ... (los estilos se mantienen igual)
 
 // 🎨 **Estilos en JavaScript**
 const styles: { [key: string]: React.CSSProperties } = {
