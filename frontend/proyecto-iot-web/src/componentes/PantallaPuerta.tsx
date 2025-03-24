@@ -8,8 +8,8 @@ const PantallaPuerta: React.FC = () => {
   const handleTogglePuerta = async () => {
     try {
       const url = puertaAbierta
-        ? "http://192.168.8.3:8082/api/door/cerrar" //(IPCONFIG)
-        : "http://192.168.8.3:8082/api/door/abrir"; //(IPCONFIG)
+        ? "http://192.168.8.4:8082/api/door/cerrar" //(IPCONFIG)
+        : "http://192.168.8.4:8082/api/door/abrir"; //(IPCONFIG)
       const response = await axios.get(url);
       setPuertaAbierta(!puertaAbierta);
       alert(response.data);
