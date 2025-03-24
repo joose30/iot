@@ -1,3 +1,4 @@
+// IntegradoraWEB/frontend/src/routes/productRoutes.ts <- Ruta
 import express, { Router, RequestHandler } from 'express';
 import { addProduct, getProducts } from '../controllers/productController';
 

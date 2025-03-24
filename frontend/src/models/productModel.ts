@@ -1,3 +1,4 @@
+// IntegradoraWEB/frontend/src/models/productModel.ts <- Ruta
 import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({

@@ -1,3 +1,4 @@
+// IntegradoraWEB/frontend/config/db.ts <- Ruta
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 

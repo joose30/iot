@@ -1,3 +1,4 @@
+// IntegradoraWEB/frontend/proyecto-iot-web/src/componentes/PantallaAgregarProducto.tsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -7,27 +8,78 @@ const PantallaAgregarProducto: React.FC = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!image) return null;
+    
+    const preset_name = "ml_default"; // Reemplaza con tu upload preset name
+    const cloud_name = "dnwpy45qa"; // Reemplaza con tu cloud name
+    
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", preset_name);
+    
+    setLoading(true);
+    
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      
+      const data = await response.json();
+      setLoading(false);
+      return data.secure_url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setLoading(false);
+      return null;
+    }
+  };
 
   const handleAddProduct = async () => {
+    if (!name || !description || !price || !category || !image) {
+      alert("Por favor completa todos los campos");
+      return;
+    }
+
+    const imageUrl = await uploadImage();
+    if (!imageUrl) {
+      alert("Error al subir la imagen");
+      return;
+    }
+
     try {
       const response = await axios.post(
-        "http://localhost:8082/api/products/add", //(IPCONFIG)
+        "http://localhost:8082/api/products/add",
         {
           name,
           description,
           price,
           category,
-          image: " ", // Campo adicional (puede ser una cadena vacía si no es obligatorio)
+          image: imageUrl,
         }
       );
       if (response.status === 201) {
         console.log("Producto agregado:", response.data);
         alert("Producto agregado exitosamente");
-        // Limpiar los campos después de agregar el producto
+        // Resetear formulario
         setName("");
         setDescription("");
         setPrice("");
         setCategory("");
+        setImage(null);
       }
     } catch (error) {
       console.error("Error al agregar el producto:", error);
@@ -38,8 +90,6 @@ const PantallaAgregarProducto: React.FC = () => {
   return (
     <div style={styles.screen}>
       <div style={styles.cardContainer}>
-
-        {/* Contenido principal */}
         <div style={styles.contentContainer}>
           <h2 style={styles.title}>Agregar Producto</h2>
 
@@ -79,14 +129,27 @@ const PantallaAgregarProducto: React.FC = () => {
             onChange={(e) => setCategory(e.target.value)}
           />
 
-          <button style={styles.button} onClick={handleAddProduct}>
-            Agregar Producto
+          <label style={styles.label}>Imagen</label>
+          <input
+            type="file"
+            style={styles.input}
+            onChange={handleImageChange}
+          />
+
+          <button 
+            style={styles.button} 
+            onClick={handleAddProduct}
+            disabled={loading}
+          >
+            {loading ? "Subiendo imagen..." : "Agregar Producto"}
           </button>
         </div>
       </div>
     </div>
   );
 };
+
+// ... (los estilos se mantienen igual)
 
 // 🎨 **Estilos en JavaScript**
 const styles: { [key: string]: React.CSSProperties } = {
