@@ -7,6 +7,7 @@ interface LoginResponse {
   message: string;
   name: string;
   role: string;
+  token: string; // Añadir el token a la interfaz
 }
 
 const PantallaLogin: React.FC = () => {
@@ -32,9 +33,10 @@ const PantallaLogin: React.FC = () => {
       // Si el inicio de sesión es exitoso
       alert(response.data.message); // Mensaje del servidor
 
-      // Guardar el nombre y rol del usuario en localStorage
+      // Guardar el nombre, rol y token del usuario en localStorage
       localStorage.setItem("userName", response.data.name);
       localStorage.setItem("userRole", response.data.role);
+      localStorage.setItem("token", response.data.token); // Guarda el token en localStorage
 
       // Redirigir según el rol
       if (response.data.role === "admin") {
