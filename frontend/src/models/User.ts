@@ -10,6 +10,8 @@ export interface IUser extends Document {
   password: string;
   role: string;
   recoveryToken: string | null; // Permitir que sea string o null
+  secretQuestion: string; // Nueva propiedad
+  secretAnswer: string;   // Nueva propiedad
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -21,6 +23,8 @@ const userSchema = new mongoose.Schema<IUser>({
   password: { type: String, required: true },
   role: { type: String, default: 'user' },
   recoveryToken: { type: String, default: null },
+  secretQuestion: { type: String, required: true }, // Nueva propiedad
+  secretAnswer: { type: String, required: true },   // Nueva propiedad
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
