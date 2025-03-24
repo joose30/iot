@@ -15,6 +15,8 @@ import EmpresaInfo from "./componentes/EmpresaInfo"; // Importa EmpresaInfo
 import PantallaRecuperarContraseña from "./componentes/PantallaRecuperarContraseña"; // Importa PantallaRecuperarContraseña
 import PantallaRestablecerContraseña from "./componentes/PantallaRestablecerContraseña"; // Importa PantallaRestablecerContraseña
 import PantallaProductoDetail from "./componentes/PantallaProductoDetail"; // Importa PantallaCatalogo
+import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario"; // Importa PantallaPerfilUsuario
+import GestionarUsuarios from "./componentes/GestionarUsuarios";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -29,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<PantallaRegistro />} />
           <Route path="/home" element={<PantallaInicio />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/gestionar-usuarios" element={<GestionarUsuarios />} />
           <Route path="/admin-empresa" element={<PantallaDatosEmpresa />} />
           <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
           <Route path="/empresa" element={<EmpresaInfo />} /> {/* Ruta para Empresa */}
@@ -36,7 +39,7 @@ const App: React.FC = () => {
           <Route path="/huella" element={<PantallaPuerta />} /> {/* Ruta para Huella */}
           <Route path="/dispositivo" element={<PantallaPuerta />} /> {/* Ruta para Dispositivo IoT */}
           <Route path="/rfid" element={<PantallaRfidControl />} /> {/* Ruta para RFID */}
-          <Route path="/perfil" element={<PantallaInicio />} /> {/* Ruta para Perfil */}
+          <Route path="/perfil" element={<PantallaPerfilUsuario />} /> {/* Ruta para Perfil */}
           <Route path="/productoDetail" element={<PantallaProductoDetail />} />
           <Route path="/login" element={<PantallaLogin />} /> {/* Ruta para Login */}
           <Route path="/recover-password" element={<PantallaRecuperarContraseña />} /> {/* Ruta para Recuperar Contraseña */}

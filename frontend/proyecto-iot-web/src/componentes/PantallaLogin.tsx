@@ -7,6 +7,7 @@ interface LoginResponse {
   message: string;
   name: string;
   role: string;
+  token: string; // Añadir el token a la interfaz
 }
 
 const PantallaLogin: React.FC = () => {
@@ -18,7 +19,6 @@ const PantallaLogin: React.FC = () => {
     e.preventDefault();
 
     try {
-      // Enviar las credenciales al backend
       const response = await axios.post<LoginResponse>(
         "http://localhost:8082/api/users/login",
         { email, password },
@@ -30,22 +30,23 @@ const PantallaLogin: React.FC = () => {
       );
 
       // Si el inicio de sesión es exitoso
-      alert(response.data.message); // Mensaje del servidor
+      alert(response.data.message);
 
-      // Guardar el nombre y rol del usuario en localStorage
+      // Guardar el token y el nombre del usuario en localStorage
       localStorage.setItem("userName", response.data.name);
       localStorage.setItem("userRole", response.data.role);
+      localStorage.setItem("token", response.data.token);
 
       // Redirigir según el rol
       if (response.data.role === "admin") {
-        navigate("/admin-dashboard"); // Redirige al dashboard de admin
+        navigate("/admin-dashboard");
       } else {
-        navigate("/home"); // Redirige a la página principal para usuarios
+        navigate("/home");
+        window.location.reload(); // Forzar recarga de la página
       }
     } catch (error: any) {
-      // Manejo de errores
       if (error.response) {
-        alert(error.response.data.message); // Mensaje de error del servidor
+        alert(error.response.data.message);
       } else {
         alert("Error al conectar con el servidor");
       }

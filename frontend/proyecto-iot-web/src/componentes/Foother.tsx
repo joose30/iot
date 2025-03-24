@@ -45,7 +45,14 @@ const Footer: React.FC = () => {
           <h3 style={styles.footerTitle}>CONTÁCTANOS</h3>
           <p style={styles.footerText}>
             {address}<br />
-            segurix@mail.com<br />
+            <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=segurixmx@gmail.com&su=Consulta&body=Hola,%20me%20gustaría%20obtener%20más%20información."
+            target="_blank"
+            rel="noopener noreferrer"
+            style={styles.emailLink}
+            >
+            segurixmx@gmail.com
+            </a><br />
             +52 774 545 8510
           </p>
         </div>
