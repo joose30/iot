@@ -131,13 +131,15 @@ const PantallaAgregarProducto: React.FC = () => {
           />
 
           <label style={styles.label}>Categoría</label>
-          <input
-            type="text"
+          <select
             style={styles.input}
-            placeholder="Ingresa la categoría del producto"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-          />
+          >
+            <option value="">Selecciona una categoría</option>
+            <option value="Puerta Inteligente">Puerta Inteligente</option>
+            <option value="Cerradura Inteligente">Cerradura Inteligente</option>
+          </select>
 
           <label style={styles.label}>Imagen</label>
           <input
