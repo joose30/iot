@@ -6,6 +6,7 @@ import doorRoutes from './src/routes/doorRoutes';  // Rutas para el control de l
 import userRoutes from './src/routes/userRoutes'; // Importa las rutas de usuarios
 import empresaRoutes from './src/routes/empresaRoutes';
 import productRoutes from './src/routes/productRoutes'; // Importa las rutas de productos
+import preguntasFrecuentesRoutes from './src/routes/preguntasFrecuentesRoutes'; // Importa las rutas de preguntas frecuentes
 
 dotenv.config(); // Cargando las variables de entorno desde .env
 
@@ -33,6 +34,7 @@ app.use('/api/door', doorRoutes);  // Rutas para el control de la puerta
 app.use('/api/users', userRoutes); // Registra las rutas de usuarios
 app.use('/api/empresa', empresaRoutes); // Rutas de empresa
 app.use('/api/products', productRoutes); // Rutas de productos
+app.use('/api/preguntasFrecuentes', preguntasFrecuentesRoutes); // Rutas de preguntas frecuentes
 
 // Iniciar servidor
 app.listen(PORT, () => {

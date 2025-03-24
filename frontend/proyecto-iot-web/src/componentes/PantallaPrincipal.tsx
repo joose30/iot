@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import axios from "axios";
 
 // Configuración del ícono del marcador (necesario para React Leaflet)
 const icon = L.icon({
@@ -15,9 +16,20 @@ const icon = L.icon({
   shadowSize: [41, 41],
 });
 
+// Interfaz para las preguntas frecuentes
+interface FAQ {
+  _id: string;
+  pregunta: string;
+  respuesta: string;
+}
+
 const PantallaInicio: React.FC = () => {
   const [activeOption, setActiveOption] = useState<string>("Empresa");
   const [userName, setUserName] = useState("");
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [loadingFaqs, setLoadingFaqs] = useState(true);
+  const [error, setError] = useState("");
+  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
 
   useEffect(() => {
     // Obtener el nombre del usuario desde localStorage
@@ -25,7 +37,38 @@ const PantallaInicio: React.FC = () => {
     if (name) {
       setUserName(name);
     }
+
+    // Cargar preguntas frecuentes desde el backend
+    const fetchFAQs = async () => {
+      try {
+        setLoadingFaqs(true);
+        const response = await axios.get<FAQ[]>("http://localhost:8082/api/preguntasFrecuentes");
+        setFaqs(response.data);
+        setError("");
+      } catch (err) {
+        console.error("Error al cargar preguntas frecuentes:", err);
+        setError("No se pudieron cargar las preguntas frecuentes");
+        // Datos de respaldo en caso de error
+        setFaqs([
+          { _id: "1", pregunta: "¿Para qué sirve Segurix?", respuesta: "Segurix es una plataforma para gestionar y controlar dispositivos IoT de seguridad." },
+          { _id: "2", pregunta: "¿Cómo conectar mi dispositivo IoT?", respuesta: "Ve a la sección de dispositivos y sigue las instrucciones de configuración." },
+        ]);
+      } finally {
+        setLoadingFaqs(false);
+      }
+    };
+
+    fetchFAQs();
   }, []);
+
+  // Función para alternar la visibilidad de la respuesta
+  const toggleFaqExpansion = (id: string) => {
+    if (expandedFaq === id) {
+      setExpandedFaq(null);
+    } else {
+      setExpandedFaq(id);
+    }
+  };
 
   // Coordenadas de Huejutla de Reyes, Hidalgo
   const huejutlaLocation: L.LatLngExpression = [21.1416751, -98.4201608];
@@ -72,13 +115,37 @@ const PantallaInicio: React.FC = () => {
 
         {/* Sección de Preguntas Frecuentes */}
         <div style={styles.faqSection}>
-          <div style={styles.faqItem}>
-            <p style={styles.faqTitle}>Preguntas Frecuentes</p>
-            <p>¿Para qué sirve Segurix?</p>
-          </div>
-          <div style={styles.faqItem}>
-            <p>¿Cómo conectar mi dispositivo IoT?</p>
-          </div>
+          <h3 style={styles.faqTitle}>Preguntas Frecuentes</h3>
+
+          {loadingFaqs ? (
+            <div style={styles.loadingContainer}>
+              <p>Cargando preguntas...</p>
+            </div>
+          ) : error ? (
+            <div style={styles.errorContainer}>
+              <p>{error}</p>
+            </div>
+          ) : (
+            faqs.map((faq) => (
+              <div key={faq._id} style={styles.faqItem}>
+                <div
+                  style={styles.faqQuestion}
+                  onClick={() => toggleFaqExpansion(faq._id)}
+                >
+                  <p style={styles.faqQuestionText}>{faq.pregunta}</p>
+                  <span style={styles.faqToggleIcon}>
+                    {expandedFaq === faq._id ? "▲" : "▼"}
+                  </span>
+                </div>
+
+                {expandedFaq === faq._id && (
+                  <div style={styles.faqAnswer}>
+                    <p style={styles.faqAnswerText}>{faq.respuesta}</p>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -162,12 +229,40 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "10px 15px",
     borderRadius: "8px",
     marginBottom: "8px",
+    cursor: "pointer",
   },
-  faqTitle: {
-    fontSize: "18px",
-    fontWeight: "bold",
-    color: "#2C2C2C",
-    marginBottom: "5px",
+  faqQuestion: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  faqQuestionText: {
+    fontSize: "16px",
+    fontWeight: "500",
+    color: "#1E1E1E",
+  },
+  faqToggleIcon: {
+    fontSize: "14px",
+    color: "#1E1E1E",
+  },
+  faqAnswer: {
+    marginTop: "10px",
+    paddingTop: "10px",
+    borderTop: "1px solid #E0E0E0",
+  },
+  faqAnswerText: {
+    fontSize: "14px",
+    color: "#333",
+  },
+  loadingContainer: {
+    textAlign: "center",
+    padding: "20px",
+  },
+  errorContainer: {
+    backgroundColor: "#ffebee",
+    padding: "15px",
+    borderRadius: "8px",
+    textAlign: "center",
   },
 };
 
