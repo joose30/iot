@@ -187,6 +187,28 @@ router.put('/usuario', authMiddleware, async (req, res) => {
   }
 });
 
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, role } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name, email, role },
+      { new: true } // Devuelve el usuario actualizado
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).json({ message: 'Error al actualizar el usuario' });
+  }
+});
+
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const users = await User.find(); // Obtén todos los usuarios
