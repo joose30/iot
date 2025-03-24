@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PantallaRegistro: React.FC = () => {
   const [name, setName] = useState("");
@@ -8,9 +9,34 @@ const PantallaRegistro: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate(); // Hook para redirigir
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    if (password !== value) {
+      setPasswordError("Las contraseñas no coinciden");
+    } else {
+      setPasswordError(""); // Limpiar el mensaje de error si coinciden
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
 
     try {
       const response = await axios.post("http://localhost:8082/api/users/register", {
@@ -24,6 +50,8 @@ const PantallaRegistro: React.FC = () => {
 
       if (response.status === 201) {
         alert("Usuario registrado exitosamente");
+        navigate("/login"); // Redirigir al login
+        window.location.reload(); // Recargar la página
       }
     } catch (error: any) {
       if (error.response) {
@@ -89,14 +117,43 @@ const PantallaRegistro: React.FC = () => {
         />
 
         <label style={styles.label}>Contraseña</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Ingresa tu contraseña"
-          required
-          style={styles.input}
-        />
+        <div style={styles.passwordContainer}>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Ingresa tu contraseña"
+            required
+            style={styles.input}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            style={styles.toggleButton}
+          >
+            {showPassword ? "🙉" : "🙈"}
+          </button>
+        </div>
+
+        <label style={styles.label}>Confirmar Contraseña</label>
+        <div style={styles.passwordContainer}>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            placeholder="Confirma tu contraseña"
+            required
+            style={styles.input}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            style={styles.toggleButton}
+          >
+            {showPassword ? "🙉" : "🙈"}
+          </button>
+        </div>
+        {passwordError && <p style={styles.error}>{passwordError}</p>}
 
         <button type="submit" style={styles.button}>
           Registrarse
@@ -112,9 +169,11 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    minHeight: "100vh",
+    padding: "20px",
     fontFamily: "Arial, sans-serif",
     textAlign: "center",
+    backgroundColor: "#f8f9fa",
   },
   title: {
     fontSize: "24px",
@@ -124,11 +183,13 @@ const styles: Record<string, React.CSSProperties> = {
   form: {
     display: "flex",
     flexDirection: "column",
-    width: "300px",
+    width: "100%",
+    maxWidth: "400px",
     padding: "20px",
     borderRadius: "5px",
     backgroundColor: "#fff",
     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+    marginBottom: "40px",
   },
   label: {
     fontSize: "14px",
@@ -143,6 +204,25 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "4px",
     fontSize: "16px",
     width: "100%",
+  },
+  passwordContainer: {
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+  },
+  toggleButton: {
+    position: "absolute",
+    right: "10px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "18px",
+  },
+  error: {
+    color: "red",
+    fontSize: "14px",
+    marginBottom: "15px",
+    textAlign: "left",
   },
   button: {
     padding: "10px",
