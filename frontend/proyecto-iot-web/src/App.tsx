@@ -1,53 +1,82 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Header from "./componentes/Header";
+import HeaderPublico from "./componentes/HeaderPublico";
 import Foother from "./componentes/Foother";
+import FootherPublico from "./componentes/FootherPublico";
 import PantallaLogin from "./componentes/PantallaLogin";
 import PantallaRegistro from "./componentes/PantallaRegistro";
 import PantallaInicio from "./componentes/PantallaPrincipal";
+import PantallaInicioPublica from "./componentes/PantallaInicioPublica";
 import AdminDashboard from "./componentes/AdminDashboard";
 import PantallaDatosEmpresa from "./componentes/PantallaDatosEmpresa";
 import PantallaAgregarProducto from "./componentes/PantallaAgregarProducto";
-import PantallaCatalogo from "./componentes/PantallaCatalogoProductos"; // Importa PantallaCatalogo
-import PantallaPuerta from "./componentes/PantallaPuerta"; // Importa PantallaPuerta
-import PantallaRfidControl from "./componentes/PantallaRfidControl"; // Importa PantallaRfidControl
-import EmpresaInfo from "./componentes/EmpresaInfo"; // Importa EmpresaInfo
-import PantallaRecuperarContraseña from "./componentes/PantallaRecuperarContraseña"; // Importa PantallaRecuperarContraseña
-import PantallaRestablecerContraseña from "./componentes/PantallaRestablecerContraseña"; // Importa PantallaRestablecerContraseña
-import PantallaProductoDetail from "./componentes/PantallaProductoDetail"; // Importa PantallaCatalogo
-import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario"; // Importa PantallaPerfilUsuario
+import PantallaCatalogo from "./componentes/PantallaCatalogoProductos";
+import PantallaPuerta from "./componentes/PantallaPuerta";
+import PantallaRfidControl from "./componentes/PantallaRfidControl";
+import EmpresaInfo from "./componentes/EmpresaInfo";
+import PantallaRecuperarContraseña from "./componentes/PantallaRecuperarContraseña";
+import PantallaRestablecerContraseña from "./componentes/PantallaRestablecerContraseña";
+import PantallaProductoDetail from "./componentes/PantallaProductoDetail";
+import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario";
 import GestionarUsuarios from "./componentes/GestionarUsuarios";
 
 const App: React.FC = () => {
   const location = useLocation();
+  const isAuthenticated = !!localStorage.getItem('token');
+  
+  // Define public routes
+  const publicRoutes = [
+    '/', 
+    '/login', 
+    '/register',
+    '/empresa',
+    '/productos',
+    '/recover-password', 
+    '/reset-password/:token'
+  ];
+  
+  // Check if current route is public
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route.includes(':')) {
+      // Handle dynamic routes like '/reset-password/:token'
+      const routeBase = route.split('/:')[0];
+      return location.pathname.startsWith(routeBase);
+    }
+    return location.pathname === route;
+  });
 
   return (
     <>
-      {/* Mostrar el Header solo si no estamos en la pantalla de login */}
-      {location.pathname !== "/" && <Header />}
+      {/* Show public header/footer for public routes, otherwise show private ones */}
+      {isPublicRoute ? <HeaderPublico /> : <Header />}
+      
       <div>
         <Routes>
-          <Route path="/" element={<PantallaLogin />} />
+          {/* Public Routes */}
+          <Route path="/" element={<PantallaInicioPublica />} />
+          <Route path="/login" element={<PantallaLogin />} />
           <Route path="/register" element={<PantallaRegistro />} />
-          <Route path="/home" element={<PantallaInicio />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/gestionar-usuarios" element={<GestionarUsuarios />} />
-          <Route path="/admin-empresa" element={<PantallaDatosEmpresa />} />
-          <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
-          <Route path="/empresa" element={<EmpresaInfo />} /> {/* Ruta para Empresa */}
-          <Route path="/productos" element={<PantallaCatalogo />} /> {/* Ruta para Productos */}
-          <Route path="/huella" element={<PantallaPuerta />} /> {/* Ruta para Huella */}
-          <Route path="/dispositivo" element={<PantallaPuerta />} /> {/* Ruta para Dispositivo IoT */}
-          <Route path="/rfid" element={<PantallaRfidControl />} /> {/* Ruta para RFID */}
-          <Route path="/perfil" element={<PantallaPerfilUsuario />} /> {/* Ruta para Perfil */}
-          <Route path="/productoDetail" element={<PantallaProductoDetail />} />
-          <Route path="/login" element={<PantallaLogin />} /> {/* Ruta para Login */}
-          <Route path="/recover-password" element={<PantallaRecuperarContraseña />} /> {/* Ruta para Recuperar Contraseña */}
-          <Route path="/reset-password/:token" element={<PantallaRestablecerContraseña />} /> {/* Ruta para Restablecer Contraseña */}
+          <Route path="/recover-password" element={<PantallaRecuperarContraseña />} />
+          <Route path="/reset-password/:token" element={<PantallaRestablecerContraseña />} />
+          <Route path="/empresa" element={<EmpresaInfo />} />
+          <Route path="/productos" element={<PantallaCatalogo />} />
+          
+          {/* Private Routes */}
+          <Route path="/home" element={isAuthenticated ? <PantallaInicio /> : <Navigate to="/login" />} />
+          <Route path="/admin-dashboard" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
+          <Route path="/admin/gestionar-usuarios" element={isAuthenticated ? <GestionarUsuarios /> : <Navigate to="/login" />} />
+          <Route path="/admin-empresa" element={isAuthenticated ? <PantallaDatosEmpresa /> : <Navigate to="/login" />} />
+          <Route path="/admin-productos" element={isAuthenticated ? <PantallaAgregarProducto /> : <Navigate to="/login" />} />
+          <Route path="/huella" element={isAuthenticated ? <PantallaPuerta /> : <Navigate to="/login" />} />
+          <Route path="/dispositivo" element={isAuthenticated ? <PantallaPuerta /> : <Navigate to="/login" />} />
+          <Route path="/rfid" element={isAuthenticated ? <PantallaRfidControl /> : <Navigate to="/login" />} />
+          <Route path="/perfil" element={isAuthenticated ? <PantallaPerfilUsuario /> : <Navigate to="/login" />} />
+          <Route path="/productoDetail" element={isAuthenticated ? <PantallaProductoDetail /> : <Navigate to="/login" />} />
         </Routes>
       </div>
-      {/* Mostrar el Foother solo si no estamos en la pantalla de login */}
-      {location.pathname !== "/" && <Foother />}
+      
+      {isPublicRoute ? <FootherPublico /> : <Foother />}
     </>
   );
 };
