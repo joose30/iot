@@ -34,7 +34,8 @@ const App: React.FC = () => {
     '/empresa',
     '/productos',
     '/recover-password', 
-    '/reset-password/:token'
+    '/reset-password/:token',
+    '/recover-question' // Nueva ruta para Recuperar con Pregunta Secreta
   ];
   
   // Check if current route is public
@@ -70,9 +71,9 @@ const App: React.FC = () => {
           <Route path="/rfid" element={<PantallaRfidControl />} /> {/* Ruta para RFID */}
           <Route path="/perfil" element={<PantallaPerfilUsuario />} /> {/* Ruta para Perfil */}
           <Route path="/productoDetail" element={<PantallaProductoDetail />} />
-          <Route path="/login" element={<PantallaLogin />} /> {/* Ruta para Login */}
           <Route path="/recover-password" element={<PantallaRecuperarContraseña />} /> {/* Ruta para Recuperar Contraseña */}
           <Route path="/reset-password/:token" element={<PantallaRestablecerContraseña />} /> {/* Ruta para Restablecer Contraseña */}
+          <Route path="/recuperar-con-pregunta" element={<PantallaRecuperarConPregunta />} /> {/* Nueva ruta para Recuperar con Pregunta Secreta */}
         </Routes>
       </div>
       
