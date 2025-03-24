@@ -16,6 +16,7 @@ import PantallaRecuperarContraseña from "./componentes/PantallaRecuperarContras
 import PantallaRestablecerContraseña from "./componentes/PantallaRestablecerContraseña"; // Importa PantallaRestablecerContraseña
 import PantallaProductoDetail from "./componentes/PantallaProductoDetail"; // Importa PantallaCatalogo
 import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario"; // Importa PantallaPerfilUsuario
+import GestionarUsuarios from "./componentes/GestionarUsuarios";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<PantallaRegistro />} />
           <Route path="/home" element={<PantallaInicio />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/gestionar-usuarios" element={<GestionarUsuarios />} />
           <Route path="/admin-empresa" element={<PantallaDatosEmpresa />} />
           <Route path="/admin-productos" element={<PantallaAgregarProducto />} />
           <Route path="/empresa" element={<EmpresaInfo />} /> {/* Ruta para Empresa */}

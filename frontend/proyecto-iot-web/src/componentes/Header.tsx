@@ -42,6 +42,9 @@ const Header: React.FC = () => {
               <li style={styles.navItem}>
                 <Link to="/admin-productos" style={styles.navLink}>Agregar Producto</Link>
               </li>
+              <li style={styles.navItem}>
+                <Link to="/admin/gestionar-usuarios" style={styles.navLink}>Gestionar Usuarios</Link>
+              </li>
             </>
           )}
           {/* Enlaces exclusivos para usuarios normales */}

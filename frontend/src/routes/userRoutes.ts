@@ -187,4 +187,29 @@ router.put('/usuario', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const users = await User.find(); // Obtén todos los usuarios
+    res.json(users);
+  } catch (error) {
+    console.error('Error al obtener los usuarios:', error);
+    res.status(500).json({ message: 'Error al obtener los usuarios' });
+  }
+});
+
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    console.log("ID recibido para eliminar:", req.params.id); // Log para depurar
+    const userId = req.params.id;
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+    res.status(500).json({ message: 'Error al eliminar el usuario' });
+  }
+});
+
 export default router;
