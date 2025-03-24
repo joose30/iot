@@ -5,45 +5,25 @@ import { useNavigate } from "react-router-dom";
 const PantallaRecuperarContraseña: React.FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRecoverPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-
-    setIsLoading(true);
-    setMessage("Enviando solicitud...");
 
     try {
       const response = await axios.post(
         "http://localhost:8082/api/users/recover-password",
         { email },
-        { 
-          headers: { "Content-Type": "application/json" },
-          timeout: 15000 // Aumentamos el timeout a 15 segundos
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      // Verificamos si la respuesta es exitosa aunque no tenga mensaje
-      if (response.status >= 200 && response.status < 300) {
-        setMessage("✓ Correo de recuperación enviado. Por favor revisa tu bandeja de entrada.");
-      } else {
-        setMessage(response.data.message || "Solicitud recibida. Verifica tu correo.");
-      }
+      setMessage(response.data.message);
     } catch (error: any) {
-      console.error("Error en la petición:", error);
-      
-      if (error.code === 'ECONNABORTED') {
-        // Si el timeout ocurre pero sabemos que el correo puede haberse enviado
-        setMessage("Correo enviado exitosamente. Por favor verifica tu correo.");
-      } else if (error.response) {
-        setMessage(error.response.data.message || "Error en el servidor");
+      if (error.response) {
+        setMessage(error.response.data.message);
       } else {
-        setMessage("Error de conexión. Intenta nuevamente.");
+        setMessage("Error al conectar con el servidor");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -59,23 +39,11 @@ const PantallaRecuperarContraseña: React.FC = () => {
           required
           style={styles.input}
         />
-        <button 
-          type="submit" 
-          style={isLoading ? {...styles.button, backgroundColor: "#cccccc"} : styles.button}
-          disabled={isLoading}
-        >
-          {isLoading ? "Enviando..." : "Enviar enlace de recuperación"}
+        <button type="submit" style={styles.button}>
+          Enviar enlace de recuperación
         </button>
       </form>
-      {message && (
-        <p style={{
-          ...styles.message,
-          color: message.startsWith("✓") ? "#28a745" : 
-                message.includes("Error") ? "#dc3545" : "#ffc107"
-        }}>
-          {message}
-        </p>
-      )}
+      {message && <p style={styles.message}>{message}</p>}
       <p>
         <a
           href="/recuperar-con-pregunta"
@@ -134,14 +102,11 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "4px",
     fontSize: "16px",
     cursor: "pointer",
-    transition: "background-color 0.3s",
   },
   message: {
     marginTop: "20px",
     fontSize: "14px",
-    padding: "10px",
-    borderRadius: "4px",
-    textAlign: "center",
+    color: "#28a745",
   },
   link: {
     color: "#007bff",
