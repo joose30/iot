@@ -73,7 +73,7 @@ const GestionarUsuarios: React.FC = () => {
         }
       );
 
-      setUsers(users.map((user) => (user._id === editingUser._id ? (response.data as User) : user)));
+      setUsers(users.map((user) => (user._id === editingUser._id ? response.data : user)));
       setEditingUser(null);
       alert("Usuario actualizado correctamente.");
     } catch (err) {

@@ -24,7 +24,7 @@ const PantallaPerfilUsuario: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
-        const response = await axios.get<User>("http://localhost:8082/api/users/usuario", {
+        const response = await axios.get("http://localhost:8082/api/users/usuario", {
           headers: {
             Authorization: `Bearer ${token}`, // Incluir el token en los encabezados
           },

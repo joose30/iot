@@ -39,7 +39,7 @@ export default function PantallaCatalogoProductos() {
       try {
         const response = await axios.get("http://localhost:8082/api/products/categories");
         if (response.status === 200) {
-          setCategories(response.data as string[]);
+          setCategories(response.data);
         }
       } catch (err) {
         console.error("Error al cargar las categorías:", err);
