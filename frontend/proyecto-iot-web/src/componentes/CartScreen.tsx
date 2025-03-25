@@ -1,8 +1,15 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function CartScreen() {
     const { cart, removeFromCart, clearCart } = useCart();
+    const navigate = useNavigate();
+
+    const handleCheckout = () => {
+        // Redirige a la pantalla de pago
+        navigate('/checkout');
+    };
 
     if (cart.length === 0) {
         return <div style={styles.emptyCart}>El carrito está vacío</div>;
@@ -25,6 +32,7 @@ export default function CartScreen() {
                 ))}
             </ul>
             <button onClick={clearCart} style={styles.clearCartButton}>Vaciar carrito</button>
+            <button onClick={handleCheckout} style={styles.checkoutButton}>Realizar compra</button>
         </div>
     );
 }
@@ -36,5 +44,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     cartItem: { display: 'flex', marginBottom: '20px' },
     productImage: { width: '100px', height: '100px', marginRight: '20px' },
     clearCartButton: { backgroundColor: '#E74C3C', color: '#FFF', padding: '10px', border: 'none', cursor: 'pointer' },
+    checkoutButton: { backgroundColor: '#2ECC71', color: '#FFF', padding: '10px', border: 'none', cursor: 'pointer', marginLeft: '10px' },
     emptyCart: { textAlign: 'center', marginTop: '50px', fontSize: '18px' },
 };

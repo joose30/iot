@@ -26,6 +26,7 @@ import GestionarUsuarios from "./componentes/GestionarUsuarios";
 import PantallaRecuperarConPregunta from "./componentes/PantallaRecuperarConPregunta"; // Importa PantallaRecuperarConPregunta
 import { CartProvider } from "./context/CartContext";
 import CartScreen from "./componentes/CartScreen";
+import CheckoutScreen from "./componentes/CheckoutScreen";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -93,6 +94,7 @@ const App: React.FC = () => {
           <Route path="/perfil" element={isAuthenticated ? <PantallaPerfilUsuario /> : <Navigate to="/login" />} />
           <Route path="/producto/:id" element={<PantallaProductoDetail />} />
           <Route path="/carrito" element={<CartScreen />} />
+          <Route path="/checkout" element={<CheckoutScreen />} />
         </Routes>
       </div>
       
