@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 type Product = {
   _id: string;
@@ -144,6 +144,10 @@ export default function PantallaCatalogoProductos() {
             Siguiente
           </button>
         </div>
+
+        <Link to="/carrito" style={{ textDecoration: 'none', color: '#27AE60' }}>
+          Ver Carrito
+        </Link>
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from '../context/CartContext';
 
 const Header: React.FC = () => {
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
+  const { cart } = useCart();
 
   useEffect(() => {
     // Obtener el nombre y rol del usuario desde localStorage
@@ -68,6 +70,9 @@ const Header: React.FC = () => {
             </>
           )}
         </ul>
+        <Link to="/carrito" style={styles.cartLink}>
+          Carrito ({cart.length})
+        </Link>
       </nav>
       <div style={styles.rightSection}>
         {userName && <p style={styles.welcome}>Bienvenido, {userName}</p>}
@@ -142,6 +147,12 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "4px",
     fontSize: "14px",
     cursor: "pointer",
+  },
+  cartLink: {
+    fontSize: '18px',
+    textDecoration: 'none',
+    color: '#FFFFFF',
+    marginLeft: '20px',
   },
 };
 
