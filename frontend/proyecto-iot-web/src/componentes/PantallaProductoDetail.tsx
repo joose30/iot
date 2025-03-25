@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 type Product = {
     _id: string;
@@ -12,11 +13,17 @@ type Product = {
 
 export default function ProductoDetail() {
     const location = useLocation();
+    const { addToCart } = useCart();
     const product: Product = location.state?.product;
 
     if (!product) {
         return <div style={styles.errorContainer}>Producto no encontrado</div>;
     }
+
+    const handleAddToCart = () => {
+        addToCart(product);
+        alert('Producto agregado al carrito');
+    };
 
     return (
         <div style={styles.screen}>
@@ -35,12 +42,14 @@ export default function ProductoDetail() {
                         <strong style={styles.detailLabel}>Descripción:</strong> <span style={styles.detailValue}>{product.description || 'Sin descripción disponible.'}</span>
                     </div>
                 </div>
+                <button style={styles.addToCartButton} onClick={handleAddToCart}>
+                    Agregar al carrito
+                </button>
             </div>
         </div>
     );
 }
 
-// 🎨 **Estilos para mejorar la pantalla de detalle de producto**
 const styles: { [key: string]: React.CSSProperties } = {
     screen: {
         display: 'flex',
@@ -95,5 +104,15 @@ const styles: { [key: string]: React.CSSProperties } = {
         height: '100vh',
         color: '#E74C3C',
         fontSize: '18px',
+    },
+    addToCartButton: {
+        marginTop: '20px',
+        padding: '10px 20px',
+        backgroundColor: '#27AE60',
+        color: '#FFFFFF',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
     },
 };

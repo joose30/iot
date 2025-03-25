@@ -23,6 +23,8 @@ import PantallaProductoDetail from "./componentes/PantallaProductoDetail";
 import PantallaProductoDetailPublica from "./componentes/PantallaProductoDetailPublica";
 import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario";
 import GestionarUsuarios from "./componentes/GestionarUsuarios";
+import { CartProvider } from './context/CartContext';
+import CartScreen from './componentes/CartScreen';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -86,6 +88,8 @@ const App: React.FC = () => {
           <Route path="/dispositivo" element={isAuthenticated ? <PantallaPuerta /> : <Navigate to="/login" />} />
           <Route path="/rfid" element={isAuthenticated ? <PantallaRfidControl /> : <Navigate to="/login" />} />
           <Route path="/perfil" element={isAuthenticated ? <PantallaPerfilUsuario /> : <Navigate to="/login" />} />
+          <Route path="/producto/:id" element={<PantallaProductoDetail />} />
+          <Route path="/carrito" element={<CartScreen />} />
         </Routes>
       </div>
       
@@ -96,9 +100,11 @@ const App: React.FC = () => {
 };
 
 const AppWrapper: React.FC = () => (
-  <Router>
-    <App />
-  </Router>
+  <CartProvider>
+    <Router>
+      <App />
+    </Router>
+  </CartProvider>
 );
 
 export default AppWrapper;
