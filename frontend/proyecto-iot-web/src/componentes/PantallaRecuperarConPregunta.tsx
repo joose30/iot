@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PantallaRecuperarConPregunta: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -7,15 +8,18 @@ const PantallaRecuperarConPregunta: React.FC = () => {
   const [secretAnswer, setSecretAnswer] = useState("");
   const [message, setMessage] = useState("");
   const [questions, setQuestions] = useState<{ id: string; pregunta: string }[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Obtener las preguntas secretas desde la base de datos
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:8082/api/users/questions");
+        const response = await axios.get<{ id: string; pregunta: string }[]>(
+          "http://localhost:8082/api/users/questions"
+        );
         setQuestions(response.data);
       } catch (error) {
         console.error("Error al obtener las preguntas secretas:", error);
+        setMessage("Error al cargar las preguntas secretas");
       }
     };
 
@@ -26,7 +30,7 @@ const PantallaRecuperarConPregunta: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
+      const response = await axios.post<{ message: string; success: boolean }>(
         "http://localhost:8082/api/users/validate-question",
         {
           email,
@@ -37,6 +41,12 @@ const PantallaRecuperarConPregunta: React.FC = () => {
       );
 
       setMessage(response.data.message);
+      
+      if (response.data.success) {
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
     } catch (error: any) {
       if (error.response) {
         setMessage(error.response.data.message);
@@ -57,6 +67,7 @@ const PantallaRecuperarConPregunta: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
           style={styles.input}
+          placeholder="Ingresa tu correo electrónico"
         />
 
         <label style={styles.label}>Pregunta secreta:</label>
@@ -81,13 +92,21 @@ const PantallaRecuperarConPregunta: React.FC = () => {
           onChange={(e) => setSecretAnswer(e.target.value)}
           required
           style={styles.input}
+          placeholder="Ingresa tu respuesta"
         />
 
         <button type="submit" style={styles.button}>
           Validar respuesta
         </button>
       </form>
-      {message && <p style={styles.message}>{message}</p>}
+      {message && (
+        <p style={{
+          ...styles.message,
+          color: message.includes("Error") ? "#dc3545" : "#28a745"
+        }}>
+          {message}
+        </p>
+      )}
     </div>
   );
 };
@@ -98,51 +117,59 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
-    fontFamily: "Arial, sans-serif",
-    textAlign: "center",
+    minHeight: "100vh",
+    padding: "20px",
+    backgroundColor: "#f8f9fa",
   },
   title: {
     fontSize: "24px",
     fontWeight: "bold",
     marginBottom: "20px",
+    color: "#333",
   },
   form: {
-    display: "flex",
-    flexDirection: "column",
-    width: "300px",
-    padding: "20px",
-    borderRadius: "5px",
+    width: "100%",
+    maxWidth: "400px",
+    padding: "30px",
+    borderRadius: "8px",
     backgroundColor: "#fff",
-    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
   },
   label: {
+    display: "block",
     fontSize: "14px",
     fontWeight: "bold",
-    marginBottom: "5px",
-    textAlign: "left",
+    marginBottom: "8px",
+    color: "#555",
   },
   input: {
-    padding: "10px",
-    marginBottom: "15px",
-    border: "1px solid #ccc",
+    width: "100%",
+    padding: "12px",
+    marginBottom: "20px",
+    border: "1px solid #ddd",
     borderRadius: "4px",
     fontSize: "16px",
-    width: "100%",
+    transition: "border-color 0.3s ease",
   },
   button: {
-    padding: "10px",
+    width: "100%",
+    padding: "12px",
     backgroundColor: "#007bff",
     color: "white",
     border: "none",
     borderRadius: "4px",
     fontSize: "16px",
+    fontWeight: "bold",
     cursor: "pointer",
+    transition: "background-color 0.3s ease",
   },
   message: {
     marginTop: "20px",
+    padding: "12px",
+    borderRadius: "4px",
+    textAlign: "center",
     fontSize: "14px",
-    color: "#28a745",
+    fontWeight: "500",
   },
 };
 

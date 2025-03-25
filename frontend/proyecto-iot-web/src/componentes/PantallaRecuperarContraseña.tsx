@@ -11,7 +11,7 @@ const PantallaRecuperarContraseña: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
+      const response = await axios.post<{ message: string }>(
         "http://localhost:8082/api/users/recover-password",
         { email },
         { headers: { "Content-Type": "application/json" } }

@@ -22,7 +22,7 @@ const PantallaRegistro: React.FC = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:8082/api/users/secret-questions");
+        const response = await axios.get<{ id: string; pregunta: string }[]>("http://localhost:8082/api/users/secret-questions");
         setQuestions(response.data);
       } catch (error) {
         console.error("Error al obtener las preguntas secretas:", error);

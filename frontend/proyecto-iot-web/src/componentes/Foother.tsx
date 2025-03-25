@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
         const response = await axios.get(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
         );
-        const displayName = response.data.display_name || "Dirección no disponible";
+        const displayName = (response.data as { display_name?: string }).display_name || "Dirección no disponible";
         setAddress(displayName);
       } catch (error) {
         console.error("Error al obtener la dirección:", error);

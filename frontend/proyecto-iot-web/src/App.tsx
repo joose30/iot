@@ -24,6 +24,8 @@ import PantallaProductoDetailPublica from "./componentes/PantallaProductoDetailP
 import PantallaPerfilUsuario from "./componentes/PantallaPerfilUsuario";
 import GestionarUsuarios from "./componentes/GestionarUsuarios";
 import PantallaRecuperarConPregunta from "./componentes/PantallaRecuperarConPregunta"; // Importa PantallaRecuperarConPregunta
+import { CartProvider } from "./context/CartContext";
+import CartScreen from "./componentes/CartScreen";
 
 const App: React.FC = () => {
   const location = useLocation();
