@@ -4,6 +4,8 @@ import User from '../models/User';
 import { recoverPassword } from '../controllers/userController';
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import mongoose from 'mongoose';
+import crypto from 'crypto';
 
 // Extender la interfaz Request para incluir la propiedad 'user'
 declare global {
@@ -75,44 +77,51 @@ router.post('/login', async (req, res) => {
 
 // Ruta para registrar un nuevo usuario
 router.post('/register', async (req, res) => {
-  const { name, lastName, surname, phone, email, password } = req.body;
+  const { name, lastName, surname, phone, email, password, secretQuestion, secretAnswer } = req.body;
 
   try {
-    // Verificar que todos los campos estén presentes
-    if (!name || !lastName || !surname || !phone || !email || !password) {
-      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
-    }
-
     // Verificar si el usuario ya existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'El correo ya está registrado' });
+      return res.status(400).json({ message: "El correo ya está registrado" });
     }
 
-    // Hashear la contraseña antes de guardarla
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 es el número de rondas de hashing
+    // Hashear la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear un nuevo usuario con la contraseña hasheada
+    // Crear un nuevo usuario
     const newUser = new User({
       name,
       lastName,
       surname,
       phone,
       email,
-      password: hashedPassword, // Aquí usamos la contraseña hasheada
+      password: hashedPassword,
+      secretQuestion,
+      secretAnswer,
     });
 
+    // Guardar el usuario en la base de datos
     await newUser.save();
 
-    res.status(201).json({ message: 'Usuario registrado exitosamente', user: newUser });
+    res.status(201).json({ message: "Usuario registrado exitosamente" });
   } catch (error) {
-    console.error('Error al registrar el usuario:', error);
-    res.status(500).json({ message: 'Error en el servidor', error });
+    console.error("Error al registrar el usuario:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 });
 
 // Ruta para recuperación de contraseña
-router.post('/recover-password', recoverPassword);
+router.post('/recover-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const recoveryToken = crypto.randomBytes(32).toString('hex');
+    await recoverPassword(req, recoveryToken, res);
+  } catch (error) {
+    console.error('Error en la recuperación de contraseña:', error);
+    res.status(500).json({ message: 'Error en la recuperación de contraseña' });
+  }
+});
 
 // Ruta para restablecer la contraseña
 router.post('/reset-password', async (req, res) => {
@@ -142,6 +151,37 @@ router.post('/reset-password', async (req, res) => {
   } catch (error) {
     console.error('Error al restablecer la contraseña:', error);
     res.status(500).json({ message: 'Error al procesar la solicitud.' });
+  }
+});
+
+router.post('/validate-question', async (req, res) => {
+  const { email, secretQuestion, secretAnswer } = req.body;
+
+  try {
+    // Buscar al usuario por correo
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Validar la pregunta secreta y la respuesta
+    if (user.secretQuestion !== secretQuestion || user.secretAnswer !== secretAnswer) {
+      return res.status(400).json({ message: 'Pregunta o respuesta incorrecta' });
+    }
+
+    // Generar un token único para la recuperación
+    const recoveryToken = Math.random().toString(36).substr(2);
+    user.recoveryToken = recoveryToken;
+    await user.save();
+
+    // Llamar a la función recoverPassword
+    await recoverPassword(req, recoveryToken, res);
+
+    res.status(200).json({ message: 'Validación exitosa. Correo de recuperación enviado.' });
+  } catch (error) {
+    console.error('Error al validar la pregunta secreta o enviar el correo:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
   }
 });
 
@@ -231,6 +271,30 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
     res.status(500).json({ message: 'Error al eliminar el usuario' });
+  }
+});
+
+router.get('/secret-questions', async (req, res) => {
+  try {
+    const questions = await mongoose.connection.collection('preguntassecretas').find().toArray();
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error('Error al obtener las preguntas secretas:', error);
+    res.status(500).json({ message: 'Error al obtener las preguntas secretas' });
+  }
+});
+
+router.get("/questions", async (req, res) => {
+  try {
+    const questions = await mongoose.connection
+      .collection("preguntassecretas") // Nombre de la colección
+      .find()
+      .toArray();
+
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error("Error al obtener las preguntas secretas:", error);
+    res.status(500).json({ message: "Error al obtener las preguntas secretas" });
   }
 });
 

@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const PantallaRecuperarContraseña: React.FC = () => {
+const PantallaRecuperarConPregunta: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [secretQuestion, setSecretQuestion] = useState("");
+  const [secretAnswer, setSecretAnswer] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
+  const [questions, setQuestions] = useState<{ id: string; pregunta: string }[]>([]);
 
-  const handleRecoverPassword = async (e: React.FormEvent) => {
+  useEffect(() => {
+    // Obtener las preguntas secretas desde la base de datos
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get("http://localhost:8082/api/users/questions");
+        setQuestions(response.data);
+      } catch (error) {
+        console.error("Error al obtener las preguntas secretas:", error);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+  const handleValidateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        "http://localhost:8082/api/users/recover-password",
-        { email },
+        "http://localhost:8082/api/users/validate-question",
+        {
+          email,
+          secretQuestion,
+          secretAnswer,
+        },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -29,8 +48,8 @@ const PantallaRecuperarContraseña: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Recuperar Contraseña</h2>
-      <form onSubmit={handleRecoverPassword} style={styles.form}>
+      <h2 style={styles.title}>Recuperar con Pregunta Secreta</h2>
+      <form onSubmit={handleValidateQuestion} style={styles.form}>
         <label style={styles.label}>Email:</label>
         <input
           type="email"
@@ -39,19 +58,36 @@ const PantallaRecuperarContraseña: React.FC = () => {
           required
           style={styles.input}
         />
+
+        <label style={styles.label}>Pregunta secreta:</label>
+        <select
+          value={secretQuestion}
+          onChange={(e) => setSecretQuestion(e.target.value)}
+          required
+          style={styles.input}
+        >
+          <option value="">Selecciona una pregunta</option>
+          {questions.map((q) => (
+            <option key={q.id} value={q.pregunta}>
+              {q.pregunta}
+            </option>
+          ))}
+        </select>
+
+        <label style={styles.label}>Respuesta:</label>
+        <input
+          type="text"
+          value={secretAnswer}
+          onChange={(e) => setSecretAnswer(e.target.value)}
+          required
+          style={styles.input}
+        />
+
         <button type="submit" style={styles.button}>
-          Enviar enlace de recuperación
+          Validar respuesta
         </button>
       </form>
       {message && <p style={styles.message}>{message}</p>}
-      <p>
-        <a
-          href="/recuperar-con-pregunta"
-          style={styles.link}
-        >
-          ¿Prefieres recuperar con pregunta secreta?
-        </a>
-      </p>
     </div>
   );
 };
@@ -108,11 +144,6 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "14px",
     color: "#28a745",
   },
-  link: {
-    color: "#007bff",
-    textDecoration: "none",
-    fontSize: "14px",
-  },
 };
 
-export default PantallaRecuperarContraseña;
+export default PantallaRecuperarConPregunta;
