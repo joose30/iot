@@ -51,7 +51,7 @@ export default function PantallaCatalogoProductos() {
   }, []);
 
   const handleProductClick = (product: Product) => {
-    navigate(`/productoDetail`, { state: { product } });
+    navigate(`/productoDetailPublico`, { state: { product } });
   };
 
   const filteredProducts = selectedCategory

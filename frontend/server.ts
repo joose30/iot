@@ -8,6 +8,7 @@ import userRoutes from './src/routes/userRoutes'; // Importa las rutas de usuari
 import empresaRoutes from './src/routes/empresaRoutes';
 import productRoutes from './src/routes/productRoutes'; // Importa las rutas de productos
 import preguntasFrecuentesRoutes from './src/routes/preguntasFrecuentesRoutes'; // Importa las rutas de preguntas frecuentes
+import purchaseRoutes from './src/routes/purchaseRoutes'; // Importa las rutas de compras
 
 dotenv.config(); // Cargando las variables de entorno desde .env
 
@@ -16,8 +17,6 @@ const PORT = process.env.PORT || 8082;
 
 // Conexión a la base de datos
 connectDB();
-
-
 
 // Configuración de CORS
 app.use(cors({
@@ -36,6 +35,7 @@ app.use('/api/users', userRoutes); // Registra las rutas de usuarios
 app.use('/api/empresa', empresaRoutes); // Rutas de empresa
 app.use('/api/products', productRoutes); // Rutas de productos
 app.use('/api/preguntasFrecuentes', preguntasFrecuentesRoutes); // Rutas de preguntas frecuentes
+app.use('/api/purchase', purchaseRoutes); // Rutas de compras
 
 // Iniciar servidor
 app.listen(PORT, () => {

@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckoutScreen() {
     const { cart, clearCart } = useCart(); // Obtén los datos del carrito y la función para vaciarlo
+    const navigate = useNavigate(); // Usa useNavigate para redirigir
+    const userEmail = localStorage.getItem('userEmail'); // Obtén el correo del usuario desde localStorage
+
+    console.log('Correo electrónico obtenido:', userEmail); // Depuración
+
     const [paymentInfo, setPaymentInfo] = useState({
-        name: '',
+        name: '', // Nombre en la tarjeta
         cardNumber: '',
         expirationDate: '',
         cvv: '',
@@ -19,14 +25,44 @@ export default function CheckoutScreen() {
         setPaymentInfo({ ...paymentInfo, [name]: value });
     };
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (Object.values(paymentInfo).some((field) => field === '')) {
             alert('Por favor, completa todos los campos de pago.');
             return;
         }
 
-        alert('Pago realizado con éxito. ¡Gracias por tu compra!');
-        clearCart(); // Vacía el carrito después del pago
+        if (!userEmail) {
+            alert('No se encontró un correo electrónico. Por favor, inicia sesión.');
+            navigate('/login'); // Redirige a la página de inicio de sesión
+            return;
+        }
+
+        console.log('Datos enviados al backend:', {
+            email: userEmail, // Usa el correo del usuario logueado
+            cart,
+        });
+
+        try {
+            const response = await fetch('http://localhost:8082/api/purchase/send-purchase-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: userEmail, // Usa el correo del usuario logueado
+                    cart, // Asegúrate de que el carrito tenga la estructura correcta
+                }),
+            });
+
+            if (response.ok) {
+                alert('Correo de confirmación enviado con éxito.');
+                clearCart(); // Vacía el carrito después del pago
+                
+            } else {
+                alert('Hubo un problema al enviar el correo.');
+            }
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+            alert('Error al enviar el correo.');
+        }
     };
 
     return (

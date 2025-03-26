@@ -32,10 +32,11 @@ const PantallaLogin: React.FC = () => {
       // Si el inicio de sesión es exitoso
       alert(response.data.message);
 
-      // Guardar el token y el nombre del usuario en localStorage
+      // Guardar el token, nombre, rol y correo del usuario en localStorage
       localStorage.setItem("userName", response.data.name);
       localStorage.setItem("userRole", response.data.role);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userEmail", email); // Guarda el correo electrónico
 
       // Redirigir según el rol
       if (response.data.role === "admin") {
