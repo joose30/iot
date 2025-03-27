@@ -12,7 +12,7 @@ const PantallaRecuperarContraseña: React.FC = () => {
 
     try {
       const response = await axios.post<{ message: string }>(
-        "http://localhost:8082/api/users/recover-password",
+        "http://iot-production-7391.up.railway.app/api/users/recover-password",
         { email },
         { headers: { "Content-Type": "application/json" } }
       );

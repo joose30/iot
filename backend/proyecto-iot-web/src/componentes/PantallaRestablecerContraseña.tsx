@@ -21,7 +21,7 @@ const PantallaRestablecerContraseña: React.FC = () => {
 
     try {
       // Enviar la nueva contraseña al backend
-      const response = await axios.post("http://localhost:8082/api/users/reset-password", {
+      const response = await axios.post("http://iot-production-7391.up.railway.app/api/users/reset-password", {
         token,
         password,
       }, {

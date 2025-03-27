@@ -14,6 +14,7 @@ const PantallaRegistro: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [secretQuestion, setSecretQuestion] = useState("");
   const [secretAnswer, setSecretAnswer] = useState("");
+  const [devicePin, setDevicePin] = useState(""); // Nuevo estado para devicePin
   const [questions, setQuestions] = useState<{ id: string; pregunta: string }[]>([]);
 
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const PantallaRegistro: React.FC = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get<{ id: string; pregunta: string }[]>("http://localhost:8082/api/users/secret-questions");
+        const response = await axios.get<{ id: string; pregunta: string }[]>("https://iot-production-7391.up.railway.app/api/users/secret-questions");
         setQuestions(response.data);
       } catch (error) {
         console.error("Error al obtener las preguntas secretas:", error);
@@ -60,8 +61,20 @@ const PantallaRegistro: React.FC = () => {
       return;
     }
 
+    console.log({
+      name,
+      lastName,
+      surname,
+      phone,
+      email,
+      password,
+      secretQuestion,
+      secretAnswer,
+      devicePin, // Verifica que este campo tenga un valor
+    });
+
     try {
-      const response = await axios.post("http://localhost:8082/api/users/register", {
+      const response = await axios.post("https://iot-production-7391.up.railway.app/api/users/register", {
         name,
         lastName,
         surname,
@@ -70,6 +83,7 @@ const PantallaRegistro: React.FC = () => {
         password,
         secretQuestion,
         secretAnswer,
+        devicePin, // Envía el campo devicePin
       });
 
       if (response.status === 201) {
@@ -200,6 +214,16 @@ const PantallaRegistro: React.FC = () => {
           onChange={(e) => setSecretAnswer(e.target.value)}
           placeholder="Ingresa tu respuesta"
           required
+          style={styles.input}
+        />
+
+        <label style={styles.label}>PIN del Dispositivo</label>
+        <input
+          type="text"
+          value={devicePin}
+          onChange={(e) => setDevicePin(e.target.value)}
+          placeholder="Ingresa el PIN del dispositivo"
+          
           style={styles.input}
         />
 

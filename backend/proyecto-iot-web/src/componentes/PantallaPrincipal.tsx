@@ -43,7 +43,7 @@ const PantallaInicio: React.FC = () => {
     const fetchFAQs = async () => {
       try {
         setLoadingFaqs(true);
-        const response = await axios.get<FAQ[]>("http://localhost:8082/api/preguntasFrecuentes");
+        const response = await axios.get<FAQ[]>("http://iot-production-7391.up.railway.app/api/preguntasFrecuentes");
         setFaqs(response.data);
         setError("");
       } catch (err) {

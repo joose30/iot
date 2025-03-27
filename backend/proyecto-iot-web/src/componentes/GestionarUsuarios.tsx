@@ -18,7 +18,7 @@ const GestionarUsuarios: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get<User[]>("http://localhost:8082/api/users", {
+        const response = await axios.get<User[]>("http://iot-production-7391.up.railway.app/api/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ const GestionarUsuarios: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8082/api/users/${userId}`, {
+      await axios.delete(`http://iot-production-7391.up.railway.app/api/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +64,7 @@ const GestionarUsuarios: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `http://localhost:8082/api/users/${editingUser._id}`,
+        `http://iot-production-7391.up.railway.app/api/users/${editingUser._id}`,
         editingUser,
         {
           headers: {

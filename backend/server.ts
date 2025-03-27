@@ -30,6 +30,12 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware global
+app.use((req, res, next) => {
+    console.log("Middleware global - Datos recibidos:", req.body);
+    next();
+});
+
 // Rutas
 app.use('/api/door', doorRoutes);  // Rutas para el control de la puerta
 app.use('/api/users', userRoutes); // Registra las rutas de usuarios
@@ -41,5 +47,5 @@ app.use('/api/fingerprints', fingerprintRoutes); // Rutas de huellas digitales
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://iot-production-7391.up.railway.app:${PORT}`);
 });

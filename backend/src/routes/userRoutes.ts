@@ -78,17 +78,25 @@ router.post('/login', async (req, res) => {
 
 // Ruta para registrar un nuevo usuario
 router.post('/register', async (req, res) => {
-  const { name, lastName, surname, phone, email, password, secretQuestion, secretAnswer } = req.body;
-
   try {
-    // Verificar si el usuario ya existe
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "El correo ya está registrado" });
+    const { name, lastName, surname, phone, email, password, secretQuestion, secretAnswer, devicePin } = req.body;
+
+    console.log("Datos recibidos en el backend:", req.body);
+
+    // Validaciones
+    if (!name || !lastName || !surname || !phone || !email || !password || !secretQuestion || !secretAnswer || !devicePin) {
+      console.log("Faltan campos obligatorios");
+      return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
 
-    // Hashear la contraseña
+    if (devicePin.trim() === "") {
+      console.log("El campo devicePin está vacío");
+      return res.status(400).json({ message: "El PIN del dispositivo no puede estar vacío" });
+    }
+
+    // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Contraseña encriptada:", hashedPassword);
 
     // Crear un nuevo usuario
     const newUser = new User({
@@ -97,13 +105,16 @@ router.post('/register', async (req, res) => {
       surname,
       phone,
       email,
-      password: hashedPassword,
+      password: hashedPassword, // Guarda la contraseña encriptada
       secretQuestion,
       secretAnswer,
+      devicePin,
     });
 
-    // Guardar el usuario en la base de datos
+    console.log("Usuario a guardar en la base de datos:", newUser);
+
     await newUser.save();
+    console.log("Usuario guardado exitosamente");
 
     res.status(201).json({ message: "Usuario registrado exitosamente" });
   } catch (error) {

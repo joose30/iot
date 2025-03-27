@@ -13,10 +13,10 @@ const PantallaConfiguracion: React.FC = () => {
   // Función para obtener la dirección MAC y la IP del dispositivo
   const obtenerDatosDispositivo = async () => {
     try {
-      const responseMac = await axios.get("http://localhost:8082/api/configuracion/mac");
+      const responseMac = await axios.get("https://iot-production-7391.up.railway.app/api/configuracion/mac");
       setMacAddress(responseMac.data.macAddress);
 
-      const responseIp = await axios.get("http://localhost:8082/api/configuracion/ip");
+      const responseIp = await axios.get("https://iot-production-7391.up.railway.app/api/configuracion/ip");
       setIpDispositivo(responseIp.data.ip);
     } catch (error) {
       console.error("Error al obtener los datos del dispositivo:", error);
@@ -39,7 +39,7 @@ const PantallaConfiguracion: React.FC = () => {
         return;
       }
 
-      await axios.post("http://localhost:8082/api/door/configuracion/pin", { email, pin: nuevoPin });
+      await axios.post("https://iot-production-7391.up.railway.app/api/door/configuracion/pin", { email, pin: nuevoPin });
       setMensaje("PIN cambiado exitosamente.");
     } catch (error) {
       console.error("Error al cambiar el PIN:", error);

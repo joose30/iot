@@ -9,7 +9,7 @@ const PantallaRegistros: React.FC = () => {
   // Función para obtener los registros desde el backend
   const obtenerRegistros = async () => {
     try {
-      const response = await axios.get("http://192.168.8.3:8082/api/door/registros"); // Ruta del backend
+      const response = await axios.get("https://iot-production-7391.up.railway.app/api/door/registros"); // Ruta del backend
       setRegistros(response.data); // Almacena los registros en el estado
       setLoading(false); // Desactiva el estado de cargando
     } catch (error) {

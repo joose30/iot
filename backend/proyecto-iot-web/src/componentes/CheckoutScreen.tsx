@@ -43,7 +43,7 @@ export default function CheckoutScreen() {
         });
 
         try {
-            const response = await fetch('http://localhost:8082/api/purchase/send-purchase-email', {
+            const response = await fetch('https://iot-production-7391.up.railway.app/api/purchase/send-purchase-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

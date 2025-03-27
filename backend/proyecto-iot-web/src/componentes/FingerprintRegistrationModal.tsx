@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-const arduinoIP = '192.168.8.2'; // Cambia esto por la IP de tu Arduino ESP32
+const arduinoIP = 'iot-production-7391.up.railway.app'; // Cambia esto por la IP de tu Arduino ESP32
 
 interface FingerprintRegisterResponse {
     success: boolean;

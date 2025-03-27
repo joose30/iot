@@ -72,7 +72,7 @@ const PantallaAgregarProducto: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8082/api/products/add",
+        "http://iot-production-7391.up.railway.app/api/products/add",
         {
           name,
           description,

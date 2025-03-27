@@ -12,7 +12,7 @@ const Contenido = () => {
   const registerFingerprint = async () => {
     try {
       const response = await fetch(
-        "http://192.168.8.6:8082/api/fingerprints/register", //(IPCONFIG)
+        "http://192.168.8.6/api/fingerprints/register", //(IPCONFIG)
         {
           method: "POST",
           headers: {
@@ -31,7 +31,7 @@ const Contenido = () => {
   const listFingerprints = async () => {
     try {
       const response = await fetch(
-        "http://192.168.8.6:8082/api/fingerprints/list" //(IPCONFIG)
+        "http://192.168.8.6/api/fingerprints/list" //(IPCONFIG)
       );
       const data = (await response.json()) as Fingerprint[]; // Asegurar que `data` es de tipo `Fingerprint[]`
       setFingerprints(data);

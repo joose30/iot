@@ -7,7 +7,7 @@ const PasswordForm = () => {
         e.preventDefault();
 
         try {
-        const response = await fetch('http://192.168.8.6:8082/api/passwords/register', { //(IPCONFIG)
+        const response = await fetch('http://192.168.8.6/api/passwords/register', { //(IPCONFIG)
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',

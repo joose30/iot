@@ -24,7 +24,7 @@ const PantallaPerfilUsuario: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
-        const response = await axios.get<User>("http://localhost:8082/api/users/usuario", {
+        const response = await axios.get<User>("https://iot-production-7391.up.railway.app/api/users/usuario", {
           headers: {
             Authorization: `Bearer ${token}`, // Incluir el token en los encabezados
           },
@@ -61,7 +61,7 @@ const PantallaPerfilUsuario: React.FC = () => {
     try {
       const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
       const response = await axios.put(
-        "http://localhost:8082/api/users/usuario",
+        "https://iot-production-7391.up.railway.app/api/users/usuario",
         {
           name: user.name,
           lastName: user.lastName,

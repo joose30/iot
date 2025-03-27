@@ -13,7 +13,7 @@ const RegistrarHuella: React.FC = () => {
             // Llama a la API para iniciar el registro de la huella
             const token = localStorage.getItem('token'); // Obtén el token del usuario
             const response = await axios.get(
-                'http://localhost:8082/api/huella/registrar', // URL del backend
+                'https://iot-production-7391.up.railway.app/api/huella/registrar', // Cambia la URL al dominio de Railway
                 {
                     headers: {
                         Authorization: `Bearer ${token}`, // Envía el token en el encabezado

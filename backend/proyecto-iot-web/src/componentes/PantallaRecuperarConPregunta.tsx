@@ -14,7 +14,7 @@ const PantallaRecuperarConPregunta: React.FC = () => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get<{ id: string; pregunta: string }[]>(
-          "http://localhost:8082/api/users/questions"
+          "http://iot-production-7391.up.railway.app/api/users/questions"
         );
         setQuestions(response.data);
       } catch (error) {
@@ -31,7 +31,7 @@ const PantallaRecuperarConPregunta: React.FC = () => {
 
     try {
       const response = await axios.post<{ message: string; success: boolean }>(
-        "http://localhost:8082/api/users/validate-question",
+        "http://iot-production-7391.up.railway.app/api/users/validate-question",
         {
           email,
           secretQuestion,

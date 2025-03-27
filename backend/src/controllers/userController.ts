@@ -37,7 +37,7 @@ export const recoverPassword = async (req: Request, recoveryToken: string, res: 
         <h1>Recuperación de contraseña</h1>
         <p>Hola ${user.name},</p>
         <p>Hemos recibido una solicitud para restablecer tu contraseña. Haz clic en el enlace de abajo para continuar:</p>
-        <a href="http://localhost:3000/reset-password/${recoveryToken}">Restablecer contraseña</a>
+        <a href="http://iot-production-7391.up.railway.app:3000/reset-password/${recoveryToken}">Restablecer contraseña</a>
         <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
       `,
     };
