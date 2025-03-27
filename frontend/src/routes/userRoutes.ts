@@ -63,10 +63,11 @@ router.post('/login', async (req, res) => {
       expiresIn: "1h", // El token expira en 1 hora
     });
 
-    // Respuesta exitosa con el token
+    // Respuesta exitosa con el token y el correo
     res.status(200).json({
       message: 'Inicio de sesión exitoso',
       token, // Devuelve el token al frontend
+      email: user.email, // Devuelve el correo del usuario
       name: user.name,
       role: user.role,
     });
