@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const PantallaDatosEmpresa: React.FC = () => {
-  const API_BASE = "https://iot-production-7391.up.railway.app/api"; //(IPCONFIG)
+  const API_BASE = "http://iot-production-7391.up.railway.app/api"; //(IPCONFIG)
 
   // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
