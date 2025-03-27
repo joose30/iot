@@ -13,7 +13,7 @@
     "moduleResolution": "node", // Usa la resolución de módulos de Node.js
     "resolveJsonModule": true, // Permite importar archivos JSON
     "isolatedModules": true,
-    "noEmit": true,
+    
     "jsx": "react-jsx",
     "outDir": "dist", // Carpeta donde se generará el código compilado
     "rootDir": "." // Carpeta raíz del código fuente
