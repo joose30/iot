@@ -8,8 +8,8 @@ const PantallaPuerta: React.FC = () => {
   const handleTogglePuerta = async () => {
     try {
       const url = puertaAbierta
-        ? "http://iot-production-7391.up.railway.app/api/door/cerrar" //(IPCONFIG)
-        : "http://iot-production-7391.up.railway.app/api/door/abrir"; //(IPCONFIG)
+        ? "https://iot-production-7391.up.railway.app/api/door/cerrar" //(IPCONFIG)
+        : "https://iot-production-7391.up.railway.app/api/door/abrir"; //(IPCONFIG)
       const response = await axios.get(url);
       setPuertaAbierta(!puertaAbierta);
       alert(response.data);
