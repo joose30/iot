@@ -24,7 +24,7 @@ export default function PantallaCatalogoProductos() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://iot-production-7391.up.railway.app/api/products/get");
+        const response = await axios.get("https://iot-production-7391.up.railway.app/api/products/get");
         if (response.status === 200) {
           setProducts(response.data as Product[]);
         }
@@ -37,7 +37,7 @@ export default function PantallaCatalogoProductos() {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://iot-production-7391.up.railway.app/api/products/categories");
+        const response = await axios.get("https://iot-production-7391.up.railway.app/api/products/categories");
         if (response.status === 200) {
           setCategories(response.data as string[]);
         }
