@@ -1,9 +1,23 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES6",
-    "moduleResolution": "Node",
+    "target": "ES6", // Define el estándar de JavaScript al que se compilará
+    "lib": ["ES6"], // Incluye las bibliotecas necesarias para ES6
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "esModuleInterop": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs", // Usa CommonJS, que es el estándar para Node.js
+    "moduleResolution": "node", // Usa la resolución de módulos de Node.js
+    "resolveJsonModule": true, // Permite importar archivos JSON
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "outDir": "dist", // Carpeta donde se generará el código compilado
+    "rootDir": "." // Carpeta raíz del código fuente
+  },
+  "include": ["server.ts", "src/**/*"], // Incluye el archivo "server.ts" y todos los archivos dentro de la carpeta "src"
+  "exclude": ["node_modules", "dist"] // Excluye las carpetas "node_modules" y "dist"
 }

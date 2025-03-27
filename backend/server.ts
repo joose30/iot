@@ -1,60 +1,43 @@
+// IntegradoraWEB/frontend/server.ts <- Ruta
 import express from 'express';
 import cors from 'cors';
-import connectDB from './config/db';
-import fingerprintRoutes from './routes/fingerprintRoutes';
-import passwordRoutes from './routes/passwordRoutes';
-import userRoutes from './routes/userRoutes';
-import huellaRoutes from './routes/huellaRoutes';
-import doorRoutes from './routes/doorRoutes';  
-import productRoutes from './routes/productRoutes'; // Import product routes
-import empresaRoutes from './routes/empresaRoutes';
-import deviceRoutes from './routes/deviceRoutes';  // Importamos las rutas del dispositivo
-import registroRoutes from './routes/registroRoutes';
-import loginRoutes from './routes/loginRoutes'
-//import doorRoute from '../frontend/src/routes/doorRoutes';
+import dotenv from 'dotenv';
+import connectDB from './config/db'; // Importando la conexión a la base de datos
+import doorRoutes from './src/routes/doorRoutes';  // Rutas para el control de la puerta
+import userRoutes from './src/routes/userRoutes'; // Importa las rutas de usuarios
+import empresaRoutes from './src/routes/empresaRoutes';
+import productRoutes from './src/routes/productRoutes'; // Importa las rutas de productos
+import preguntasFrecuentesRoutes from './src/routes/preguntasFrecuentesRoutes'; // Importa las rutas de preguntas frecuentes
+import purchaseRoutes from './src/routes/purchaseRoutes'; // Importa las rutas de compras
+import fingerprintRoutes from './src/routes/fingerprintRoutes'; // Importa las rutas de huellas digitales
+
+dotenv.config(); // Cargando las variables de entorno desde .env
 
 const app = express();
 const PORT = process.env.PORT || 8082;
 
+// Conexión a la base de datos
+connectDB();
+
 // Configuración de CORS
 app.use(cors({
-  origin: '*', // Permite cualquier origen (ajusta en producción)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Métodos permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-  credentials: true, // Permite credenciales (cookies, headers de autenticación)
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
-// Agregar manejo explícito de CORS para todas las rutas
-app.use('/api', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-
-// Agregar middleware para preflight
-app.options('*', cors());
-
-// Conectar a MongoDB (si lo estás usando)
-connectDB();
 
 // Middleware para parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
-app.use('/api/fingerprints', fingerprintRoutes); // Rutas para huellas dactilares
-app.use('/api/passwords', passwordRoutes); // Rutas para contraseñas
-app.use('/api/users', userRoutes); // Rutas para usuarios
 app.use('/api/door', doorRoutes);  // Rutas para el control de la puerta
-//app.use('/api/door', doorRoute);  // Rutas para el control de la puerta
-app.use('/api/huella', huellaRoutes);  // Rutas para el control de huellas
-app.use('/api/products', productRoutes); // Rutas para el control de productos
-app.use('/api', empresaRoutes); // Rutas para el control de los datos de la empresa
-
-app.use('/api/devices', deviceRoutes); // Ruta para los dispositivos IoT
-app.use('/api/registros', registroRoutes);
-app.use('/api/users', loginRoutes);
+app.use('/api/users', userRoutes); // Registra las rutas de usuarios
+app.use('/api/empresa', empresaRoutes); // Rutas de empresa
+app.use('/api/products', productRoutes); // Rutas de productos
+app.use('/api/preguntasFrecuentes', preguntasFrecuentesRoutes); // Rutas de preguntas frecuentes
+app.use('/api/purchase', purchaseRoutes); // Rutas de compras
+app.use('/api/fingerprints', fingerprintRoutes); // Rutas de huellas digitales
 
 // Iniciar servidor
 app.listen(PORT, () => {
