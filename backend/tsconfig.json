@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6", // Define el estándar de JavaScript al que se compilará
-    "lib": ["ES6"], // Incluye las bibliotecas necesarias para ES6
+    "lib": ["ES6", "dom"], // Incluye las bibliotecas necesarias para ES6 y DOM
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
