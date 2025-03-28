@@ -38,10 +38,10 @@ const EmpresaInfo: React.FC = () => {
         setLoading(true);
 
         const [misionRes, visionRes, valorRes, politicaRes] = await Promise.all([
-          axios.get('http://iot-production-7391.up.railway.app/api/empresa/misions'),
-          axios.get('http://iot-production-7391.up.railway.app/api/empresa/visions'),
-          axios.get('http://iot-production-7391.up.railway.app/api/empresa/valors'),
-          axios.get('http://iot-production-7391.up.railway.app/api/empresa/politicas'),
+          axios.get('https://iot-production-7391.up.railway.app/api/empresa/misions'),
+          axios.get('https://iot-production-7391.up.railway.app/api/empresa/visions'),
+          axios.get('https://iot-production-7391.up.railway.app/api/empresa/valors'),
+          axios.get('https://iot-production-7391.up.railway.app/api/empresa/politicas'),
         ]);
 
         setMision(misionRes.data as any);
