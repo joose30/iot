@@ -8,9 +8,11 @@ const PantallaPuerta: React.FC = () => {
   const handleTogglePuerta = async () => {
     try {
       const url = puertaAbierta
-        ? "https://iot-production-7391.up.railway.app/api/door/cerrar" //(IPCONFIG)
-        : "https://iot-production-7391.up.railway.app/api/door/abrir"; //(IPCONFIG)
-      const response = await axios.get(url);
+        ? "https://iot-production-7391.up.railway.app/api/door/cerrar"
+        : "https://iot-production-7391.up.railway.app/api/door/abrir";
+
+      // Cambia a POST en lugar de GET
+      const response = await axios.post(url);
       setPuertaAbierta(!puertaAbierta);
       alert(response.data);
     } catch (error) {

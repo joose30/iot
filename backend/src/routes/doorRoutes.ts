@@ -17,27 +17,49 @@ const RegistroSchema = new mongoose.Schema({
 const Registro = mongoose.model('Registro', RegistroSchema);
 
 // Ruta para abrir la puerta
-router.get('/abrir', async (req, res) => {
+router.post('/abrir', async (req, res) => {
   try {
     console.log("Intentando abrir la puerta...");
-    // Realiza una solicitud al ESP32 con la acción "abrir"
-    const response = await axios.get(`${ESP32_IP}/controlPuerta?action=abrir`);
+    console.log("Conectando al ESP32 en:", `${ESP32_IP}/controlPuerta?action=abrir`);
+
+    // Realiza una solicitud al ESP32 con el método POST
+    const response = await axios.post(`${ESP32_IP}/controlPuerta?action=abrir`);
+    console.log("Respuesta del ESP32:", response.data);
+
     res.send(response.data); // Responde con el mensaje de la ESP32
   } catch (error) {
-    console.error("Error al abrir la puerta:", error);
+    if (error instanceof Error) {
+      console.error("Error al abrir la puerta:", error.message);
+    } else {
+      console.error("Error al abrir la puerta:", error);
+    }
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Detalles del error:", error.response.data);
+    }
     res.status(500).send('Error al abrir la puerta');
   }
 });
 
 // Ruta para cerrar la puerta
-router.get('/cerrar', async (req, res) => {
+router.post('/cerrar', async (req, res) => {
   try {
     console.log("Intentando cerrar la puerta...");
-    // Realiza una solicitud al ESP32 con la acción "cerrar"
-    const response = await axios.get(`${ESP32_IP}/controlPuerta?action=cerrar`);
+    console.log("Conectando al ESP32 en:", `${ESP32_IP}/controlPuerta?action=cerrar`);
+
+    // Realiza una solicitud al ESP32 con el método POST
+    const response = await axios.post(`${ESP32_IP}/controlPuerta?action=cerrar`);
+    console.log("Respuesta del ESP32:", response.data);
+
     res.send(response.data); // Responde con el mensaje de la ESP32
   } catch (error) {
-    console.error("Error al cerrar la puerta:", error);
+    if (error instanceof Error) {
+      console.error("Error al cerrar la puerta:", error.message);
+    } else {
+      console.error("Error al cerrar la puerta:", error);
+    }
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Detalles del error:", error.response.data);
+    }
     res.status(500).send('Error al cerrar la puerta');
   }
 });
